@@ -324,6 +324,7 @@ function install_nxx_evn() {
         echo "ctags安装包下载失败 请手动执行"
         exit 1
     fi
+    cd ctags
     ./autogen.sh
     mkdir build && cd build
     ../configure --prefix=/usr/local/ctags
