@@ -49,6 +49,7 @@ function install_nodejs() {
     ln -s /usr/local/node.js/bin/node /usr/bin/node
     ln -s /usr/local/node.js/bin/npm /usr/bin/npm
     npm install -g yarn
+    npm install -g neovim
     echo "export NODE_HOME=/usr/local/node.js" >> /etc/profile
     echo "export PATH=/usr/local/node.js/bin:\$PATH" >> /etc/profile
     echo "export NODE_PATH=$NODE_HOME/lib/node_modules:\$PATH" >> /etc/profile
@@ -319,6 +320,7 @@ function install_nxx_evn() {
     
     #拷贝protoc xlua.so，librsa.a
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/protoc --no-check-certificate
+    chmod +x protoc
     mv protoc /usr/local/bin/
     
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/libxlua.so --no-check-certificate

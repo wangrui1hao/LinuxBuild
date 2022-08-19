@@ -16,8 +16,8 @@ go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
 go get -u github.com/mailru/easyjson/...
 go get golang.org/x/tools/cmd/stringer
 go install golang.org/x/tools/gopls@latest
-cp go/bin/* /usr/local/bin/
 go env -w GO111MODULE=off
+sudo cp go/bin/* /usr/local/bin/
 
 #拉取nvim配置
 yum install -y git
