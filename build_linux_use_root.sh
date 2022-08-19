@@ -1,8 +1,8 @@
-#!binbash
+#!/bin/bash
 
 function root_need() {
     if [[ $EUID -ne 0 ]]; then
-        echo ErrorThis script must be run as root! 1&2
+        echo "Error:This script must be run as root!" 1>&2
         exit 1
     fi
 }
@@ -23,26 +23,36 @@ function pre_install_env() {
 }
 
 function install_cmake() {
-    wget httpscmake.orgfilesv3.10cmake-3.10.0.tar.gz
+    wget https://cmake.org/files/v3.10/cmake-3.10.0.tar.gz
     tar -zxvf cmake-3.10.0.tar.gz
     cd cmake-3.10.0
-    .bootstrap
+    ./bootstrap
     gmake -j8
     make install
-    cd ..
-    rm -rf cmake-3.10.0
+    cd ../
+    rm -rf cmake-3.10.0*
 }
 
 function install_nodejs() {
-    curl --fail -LSs httpsinstall-node.now.shlatest  sh
+    wget https://cdn.npmmirror.com/binaries/node/v16.16.0/node-v16.16.0-linux-x64.tar.gz --no-check-certificate
+    tar -xvf node-v16.16.0-linux-x64.tar.gz
+    mv node-v16.16.0-linux-x64 /usr/local/node.js
+    ln -s /usr/local/node.js/bin/node /usr/bin/node
+    ln -s /usr/local/node.js/bin/npm /usr/bin/npm
+    npm install -g yarn
+    echo "export NODE_HOME=/usr/local/node.js" >> /etc/profile
+    echo "export PATH=/usr/local/node.js/bin:$PATH" >> /etc/profile
+    echo "export NODE_PATH=$NODE_HOME/lib/node_modules:$PATH" >> /etc/profile
+    source /etc/profile
+    rm -f node-v16.16.0-linux-x64.tar.gz
 }
 
 function install_go() {
-    wget httpsdl.google.comgogo1.16.2.linux-amd64.tar.gz
-    tar -C usrlocal -xvf go1.16.2.linux-amd64.tar.gz
-    echo export PATH=$PATHusrlocalgobin  etcprofile
-    echo export GOROOT=usrlocalgo  etcprofile
-    source etcprofile
+    wget https://dl.google.com/go/go1.16.2.linux-amd64.tar.gz
+    tar -C /usr/local -xvf go1.16.2.linux-amd64.tar.gz
+    echo "export PATH=/usr/local/go/bin:$PATH" >> /etc/profile
+    echo "export GOROOT=/usr/local/go" >> /etc/profile
+    source /etc/profile
     rm -rf go1.16.2.linux-amd64.tar.gz
 }
 
@@ -51,87 +61,136 @@ function install_svn() {
     yum remove -y svn
 
     #安装apr
-    wget httpsdlcdn.apache.orgaprapr-1.7.0.tar.gz --no-check-certificate
+    wget https://dlcdn.apache.org//apr/apr-1.7.0.tar.gz --no-check-certificate
     tar -xvf apr-1.7.0.tar.gz
     cd apr-1.7.0
     mkdir build_dir && cd build_dir
-    ..configure --prefix=usrlocalapr
+    ../configure --prefix=/usr/local/apr
     make -j8 && make install
-    cd ....
-    rm -rf apr-1.7.0
+    cd ../../
+    rm -rf apr-1.7.0*
 
     #安装apr-util
-    wget httpsdlcdn.apache.orgaprapr-util-1.6.1.tar.gz --no-check-certificate
+    wget https://dlcdn.apache.org//apr/apr-util-1.6.1.tar.gz --no-check-certificate
     tar -xvf apr-util-1.6.1.tar.gz
     cd apr-util-1.6.1
     mkdir build_dir && cd build_dir
-    ..configure --prefix=usrlocalapr-util --with-apr=usrlocalapr
+    ../configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr
     make -j8 && make install
-    cd ....
-    rm -rf apr-util-1.6.1
+    cd ../../
+    rm -rf apr-util-1.6.1*
 
     #安装sqlite3
-    wget httpswww.sqlite.org2022sqlite-autoconf-3390200.tar.gz --no-check-certificate
+    wget https://www.sqlite.org/2022/sqlite-autoconf-3390200.tar.gz --no-check-certificate
     tar -xvf sqlite-autoconf-3390200.tar.gz
     cd sqlite-autoconf-3390200
     mkdir build && cd build
-    ..configure --prefix=usrlocalsqlite
+    ../configure --prefix=/usr/local/sqlite
     make -j8 && make install
-    cd ....
-    rm -rf sqlite-autoconf-3390200
+    cd ../../
+    rm -rf sqlite-autoconf-3390200*
 
     #安裝zlib
-    wget httpwww.zlib.netzlib-1.2.12.tar.gz --no-check-certificate
+    wget http://www.zlib.net/zlib-1.2.12.tar.gz --no-check-certificate
     tar -xvf zlib-1.2.12.tar.gz
     cd zlib-1.2.12
     mkdir build && cd build
-    ..configure --prefix=usrlocalzlib
+    ../configure --prefix=/usr/local/zlib
     make -j8 && make install
-    cd ....
-    rm -rf zlib-1.2.12
+    cd ../../
+    rm -rf zlib-1.2.12*
 
     #安装scons
-    wget httpscfhcable.dl.sourceforge.netprojectsconsscons2.3.0scons-2.3.0.tar.gz --no-check-certificate
+    wget https://cfhcable.dl.sourceforge.net/project/scons/scons/2.3.0/scons-2.3.0.tar.gz --no-check-certificate
     tar -xvf scons-2.3.0.tar.gz
     cd scons-2.3.0
     python setup.py install
-    cd ..
-    rm -rf scons-2.3.0
+    cd ../
+    rm -rf scons-2.3.0*
 
     #安裝serf
-    wget httpswww.apache.orgdistserfserf-1.3.9.tar.bz2 --no-check-certificate
+    wget https://www.apache.org/dist/serf/serf-1.3.9.tar.bz2 --no-check-certificate
     tar -xvf serf-1.3.9.tar.bz2
     cd serf-1.3.9
-    scons PREFIX=usrlocalserf APR=usrlocalapr APU=usrlocalapr-util
+    scons PREFIX=/usr/local/serf APR=/usr/local/apr APU=/usr/local/apr-util
     scons install
-    cp usrlocalserfliblibserf-1.so usrlib64
-    cd ..
-    rm -rf serf-1.3.9
+    cp /usr/local/serf/lib/libserf-1.so* /usr/lib64/
+    cd ../
+    rm -rf serf-1.3.9*
 
     #安裝svn
-    wget httpsdlcdn.apache.orgsubversionsubversion-1.14.2.tar.gz --no-check-certificate
+    wget https://dlcdn.apache.org/subversion/subversion-1.14.2.tar.gz --no-check-certificate
     tar -xvf tar -xvf subversion-1.14.2.tar.gz
     cd subversion-1.14.2
     mkdir build_dir && cd build_dir
-    ..configure --prefix=usrlocalsvn --with-apr=usrlocalapr --with-apr-util=usrlocalapr-util --with-sqlite=usrlocalsqlite --with-zlib=usrlocalzlib --with-serf=usrlocalserf --with-lz4=internal --with-utf8proc=internal
+    ../configure --prefix=/usr/local/svn --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util --with-sqlite=/usr/local/sqlite --with-zlib=/usr/local/zlib --with-serf=/usr/local/serf --with-lz4=internal --with-utf8proc=internal
     make -j8 && make install
-    echo export PATH=usrlocalsvnbin$PATH  etcprofile
-    source etcprofile
-    cd ....
-    rm -rf subversion-1.14.2
+    echo "export PATH=/usr/local/svn/bin:$PATH" >> /etc/profile
+    source /etc/profile
+    cd ../../
+    rm -rf subversion-1.14.2*
 }
 
 function install_python3() {
-    if [ -d usrlocalpython37 ];
+    curl -O https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz
+    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/master/yum --no-check-certificate
+    chmod 771 yum
+    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/master/urlgrabber-ext-down --no-check-certificate
+    tar -xvf Python-3.7.6.tgz
+    cd Python-3.7.6
+    mkdir build && cd build
+    ../configure --prefix=/usr/local/python37 --enable-shared
+    make -j8 && make install
+    cp libpython3.7m.so.1.0 /usr/lib64
+    cd ../../
+    rm -rf Python-3.7.6*
+    pypath=`which python`
+    if [ $? -eq 0  ]
     then
-        rm -rf usrlocalpython37
+        # bak python
+        Sp=${pypath%/*}
+        mv $pypath $Sp/python_bak
     fi
+    ln -s /usr/local/python37/bin/python3 /bin/python3
+    ln -s /usr/local/python37/bin/python3 /usr/bin/python 
+    ln -s /usr/local/python37/bin/pip3 /usr/bin/pip
+    ln -s /usr/local/python37/bin/pip3 /usr/bin/pip3
+    mv ./yum /usr/bin/yum
+    mv ./urlgrabber-ext-down /usr/libexec/urlgrabber-ext-down
+    
+    
+}
 
-echo 请使用root权限运行此脚本
+function install_nvim() {
+    pip3 install --upgrade pip
+    pip3 install pynvim
+    pip3 install pygments
+    pip3 install neovim
+    wget http://ftp.gnu.org/gnu/glibc/glibc-2.18.tar.gz
+    tar -xvf glibc-2.18.tar.gz
+    cd glibc-2.18
+    mkdir build && cd build
+    ../configure --prefix=/usr
+    make -j8 && make install
+    cd ../../
+    rm -rf glibc-2.18*
+    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+    chmod 777 nvim.appimage
+    yum remove -y vim
+    rm -f /bin/vim
+    mv nvim.appimage /usr/bin/nvim.appimage
+    ln -s /usr/bin/nvim.appimage /bin/vim
+    npm i -g bash-language-server
+}
+    
+    
+
+echo "请使用root权限运行此脚本"
 root_need
 pre_install_env
 install_cmake
-#install_nodejs
 install_go
 install_svn
 install_python3
+install_nodejs
+install_nvim
