@@ -41,8 +41,8 @@ function install_nodejs() {
     ln -s /usr/local/node.js/bin/npm /usr/bin/npm
     npm install -g yarn
     echo "export NODE_HOME=/usr/local/node.js" >> /etc/profile
-    echo "export PATH=/usr/local/node.js/bin:$PATH" >> /etc/profile
-    echo "export NODE_PATH=$NODE_HOME/lib/node_modules:$PATH" >> /etc/profile
+    echo "export PATH=/usr/local/node.js/bin:\$PATH" >> /etc/profile
+    echo "export NODE_PATH=$NODE_HOME/lib/node_modules:\$PATH" >> /etc/profile
     source /etc/profile
     rm -f node-v16.16.0-linux-x64.tar.gz
 }
@@ -50,7 +50,7 @@ function install_nodejs() {
 function install_go() {
     wget https://dl.google.com/go/go1.16.2.linux-amd64.tar.gz
     tar -C /usr/local -xvf go1.16.2.linux-amd64.tar.gz
-    echo "export PATH=/usr/local/go/bin:$PATH" >> /etc/profile
+    echo "export PATH=/usr/local/go/bin:\$PATH" >> /etc/profile
     echo "export GOROOT=/usr/local/go" >> /etc/profile
     source /etc/profile
     rm -rf go1.16.2.linux-amd64.tar.gz
@@ -125,7 +125,7 @@ function install_svn() {
     mkdir build_dir && cd build_dir
     ../configure --prefix=/usr/local/svn --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util --with-sqlite=/usr/local/sqlite --with-zlib=/usr/local/zlib --with-serf=/usr/local/serf --with-lz4=internal --with-utf8proc=internal
     make -j8 && make install
-    echo "export PATH=/usr/local/svn/bin:$PATH" >> /etc/profile
+    echo "export PATH=/usr/local/svn/bin:\$PATH" >> /etc/profile
     source /etc/profile
     cd ../../
     rm -rf subversion-1.14.2*
@@ -166,7 +166,7 @@ function install_nvim() {
     pip3 install pynvim
     pip3 install pygments
     pip3 install neovim
-    wget http://ftp.gnu.org/gnu/glibc/glibc-2.18.tar.gz
+    wget http://ftp.gnu.org/gnu/glibc/glibc-2.18.tar.gz --no-check-certificate
     tar -xvf glibc-2.18.tar.gz
     cd glibc-2.18
     mkdir build && cd build
@@ -178,12 +178,61 @@ function install_nvim() {
     chmod 777 nvim.appimage
     yum remove -y vim
     rm -f /bin/vim
+    rm -f /bin/vi
     mv nvim.appimage /usr/bin/nvim.appimage
     ln -s /usr/bin/nvim.appimage /bin/vim
+    ln -s /usr/bin/nvim.appimage /bin/vi
     npm i -g bash-language-server
 }
+
+function install_gtags(){
+    wget https://ftp.gnu.org/pub/gnu/global/global-6.6.8.tar.gz --no-check-certificate
+    tar -xvf global-6.6.8.tar.gz
+    cd cd global-6.6.8
+    mkdir build && cd build
+    ../configure --prefix=/usr/local/gtags --with-sqlite3=/usr/local/sqlite
+    make -j8 && make install
+    echo "export PATH=/usr/local/gtags/bin:\$PATH" >> /etc/profile
+    source /etc/profile
+    cd ../../
+    rm -rf global-6.6.8*
+}
+
+function install_nxx_evn() {
+    #安装protoc
+    wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip --no-check-certificate
+    unzip protoc-3.6.1-linux-x86_64.zip
+    cp cp bin/* /usr/local/bin/
+    rm -rf bin include protoc-3.6.1-linux-x86_64.zip readme.txt
     
+    #安装go相关
+    go get github.com/gogo/protobuf/protoc-gen-gofast
+    go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
+    go get -u github.com/mailru/easyjson/...
+    go get golang.org/x/tools/cmd/stringer
+    go install golang.org/x/tools/gopls@latest
+    cp go/bin/* /usr/local/bin/
     
+    #安装ctags
+    git clone https://github.com/universal-ctags/ctags.git ctags
+    ./autogen.sh
+    mkdir build && cd build
+    ../configure --prefix=/usr/local/ctags
+    make -j8 && make install
+    echo "export PATH=/usr/local/ctags/bin:\$PATH" >> /etc/profile
+    source /etc/profile
+    cd ../../
+    rm -rf ctags
+
+    
+    #安装xlua
+    wget https://github.com/Tencent/xLua/archive/refs/tags/v2.1.14.tar.gz --no-check-certificate
+    tar -xvf v2.1.14.tar.gz
+    cd xLua-2.1.14/build
+    sh make_linux64_lua53.sh
+    cp build_linux64/libxlua.so /usr/local/lib64/
+    cp build_linux64/libxlua.so /usr/lib64/
+    go env -w GO111MODULE=off
 
 echo "请使用root权限运行此脚本"
 root_need
@@ -194,3 +243,5 @@ install_svn
 install_python3
 install_nodejs
 install_nvim
+install_gtags
+install_go_evn
