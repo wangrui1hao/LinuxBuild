@@ -243,7 +243,7 @@ function install_gtags(){
         exit 1
     fi 
     tar -xvf global-6.6.8.tar.gz
-    cd cd global-6.6.8
+    cd global-6.6.8
     mkdir build && cd build
     ../configure --prefix=/usr/local/gtags --with-sqlite3=/usr/local/sqlite
     make -j8 && make install
@@ -279,7 +279,7 @@ function install_gdb() {
     fi
     
     #拷贝gdbinit
-    wget wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/gdbinit
+    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/gdbinit
     mv gdbinit /etc/gdb/gdbinit
     
     #安装gdb
@@ -307,7 +307,7 @@ function install_nxx_evn() {
         exit 1
     fi
     unzip protoc-3.6.1-linux-x86_64.zip
-    cp cp bin/* /usr/local/bin/
+    cp bin/* /usr/local/bin/
     rm -rf bin include protoc-3.6.1-linux-x86_64.zip readme.txt
     
     #安装go相关
@@ -345,6 +345,8 @@ function install_nxx_evn() {
     sh make_linux64_lua53.sh
     cp build_linux64/libxlua.so /usr/local/lib64/
     cp build_linux64/libxlua.so /usr/lib64/
+    cd ../../
+    rm -rf v2.1.14.tar.gz xLua-2.1.14
     go env -w GO111MODULE=off
 }
 
