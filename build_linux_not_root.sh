@@ -9,6 +9,17 @@ function not_root_need() {
 
 not_root_need
 
+#安装go相关
+cd ~/
+go get github.com/gogo/protobuf/protoc-gen-gofast
+go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
+go get -u github.com/mailru/easyjson/...
+go get golang.org/x/tools/cmd/stringer
+go install golang.org/x/tools/gopls@latest
+cp go/bin/* /usr/local/bin/
+go env -w GO111MODULE=off
+
+#拉取nvim配置
 yum install -y git
 cd ~/
 if [ ! -d ~/.config ];then
@@ -20,6 +31,4 @@ fi
 
 cd ~/.config
 
-echo "开始clone 远端的vim 配置"
 git clone https://github.com/wangrui1hao/nvim-for-server.git nvim --depth=1 
-echo "clone 完成 enjoy your vim"

@@ -66,6 +66,7 @@ function install_go() {
     echo "export PATH=/usr/local/go/bin:\$PATH" >> /etc/profile
     echo "export GOROOT=/usr/local/go" >> /etc/profile
     source /etc/profile
+    sed -i 's/Defaults.*secure_path.*/&:\/usr\/local\/go\/bin/g' /etc/sudoers
     rm -rf go1.16.2.linux-amd64.tar.gz
 }
 
@@ -300,24 +301,6 @@ function install_gdb() {
 }
 
 function install_nxx_evn() {
-    #安装protoc
-    wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip --no-check-certificate
-    if [ $? -gt 0  ];then
-        echo "protoc安装包下载失败 请手动执行"
-        exit 1
-    fi
-    unzip protoc-3.6.1-linux-x86_64.zip
-    cp bin/* /usr/local/bin/
-    rm -rf bin include protoc-3.6.1-linux-x86_64.zip readme.txt
-    
-    #安装go相关
-    go get github.com/gogo/protobuf/protoc-gen-gofast
-    go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
-    go get -u github.com/mailru/easyjson/...
-    go get golang.org/x/tools/cmd/stringer
-    go install golang.org/x/tools/gopls@latest
-    cp go/bin/* /usr/local/bin/
-    
     #安装ctags
     git clone https://github.com/universal-ctags/ctags.git ctags
     if [ $? -gt 0  ];then
@@ -333,22 +316,17 @@ function install_nxx_evn() {
     source /etc/profile
     cd ../../
     rm -rf ctags
-
     
-    #安装xlua
-    wget https://github.com/Tencent/xLua/archive/refs/tags/v2.1.14.tar.gz --no-check-certificate
-    if [ $? -gt 0  ];then
-        echo "xlua安装包下载失败 请手动执行"
-        exit 1
-    fi
-    tar -xvf v2.1.14.tar.gz
-    cd xLua-2.1.14/build
-    sh make_linux64_lua53.sh
-    cp build_linux64/libxlua.so /usr/local/lib64/
-    cp build_linux64/libxlua.so /usr/lib64/
-    cd ../../
-    rm -rf v2.1.14.tar.gz xLua-2.1.14
-    go env -w GO111MODULE=off
+    #拷贝protoc xlua.so，librsa.a
+    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/protoc --no-check-certificate
+    mv protoc /usr/local/bin/
+    
+    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/libxlua.so --no-check-certificate
+    cp libxlua.so /usr/local/lib64/
+    mv libxlua.so /usr/lib64/
+    
+    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/librsa.a --no-check-certificate
+    mv librsa.a /usr/local/lib/
 }
 
 echo "请使用root权限运行此脚本"
