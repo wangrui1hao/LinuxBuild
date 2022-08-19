@@ -134,9 +134,9 @@ function install_svn() {
 
 function install_python3() {
     curl -O https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz
-    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/master/yum --no-check-certificate
+    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/yum --no-check-certificate
     chmod 771 yum
-    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/master/urlgrabber-ext-down --no-check-certificate
+    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/urlgrabber-ext-down --no-check-certificate
     tar -xvf Python-3.7.6.tgz
     cd Python-3.7.6
     mkdir build && cd build
@@ -203,29 +203,38 @@ function install_gdb() {
     #卸载gdb
     yum remove gdb -y
     
-    svn co svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python
+    if [ ! -d /data/thirdparty ]
+    then
+        mkdir /data/thirdparty
+    fi
+    
+    #安装beauty print
+    if [ ! -d /data/thirdparty/python ]
+        svn co svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python
+        mv -r python /data/thirdparty
+    then 
+
     if [ ! -d /etc/gdb ]
     then
         mkdir /etc/gdb
     fi
-
-    if [ -f /etc/gdb/gdbinit ]
-    then
-        rm /etc/gdb/gdbinit
-    fi
     
-    if [ ! -f /data/thirdparty/gdbinit ]
-    then
-        wget ftp://10.0.128.201/thirdparty/gdbinit
-    fi
-    
+    #拷贝gdbinit
+    wget wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/gdbinit
     mv gdbinit /etc/gdb/gdbinit
     
+    #安装gdb
     wget https://ftp.gnu.org/gnu/gdb/gdb-10.1.tar.gz --no-check-certificate
     tar -xvf gdb-10.1.tar.gz
     cd gdb-10.1
     mkdir build && cd build
-    ../configure --prefix=/usr/local/gdb --with-python=/usr/bin/python --enable-tui=yes --with-system-gdbinit=/etc/gdb/gdbinit
+    ../configure --prefix=/usr/local/gdb --with-python=/usr/bin/python2 --enable-tui=yes --with-system-gdbinit=/etc/gdb/gdbinit
+    make -j8 && make install
+    echo "export PATH=/usr/local/gdb/bin:\$PATH" >> /etc/profile
+    source /etc/profile
+    cd ../../
+    rm -rf gdb-10.1*
+}
 
 function install_nxx_evn() {
     #安装protoc
