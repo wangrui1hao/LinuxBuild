@@ -7,7 +7,6 @@ function not_root_need() {
     fi
 }
 
-echo "请使用非root权限运行此脚本"
 not_root_need
 
 yum install -y git

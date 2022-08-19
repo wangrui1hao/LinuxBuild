@@ -20,6 +20,7 @@ function pre_install_env() {
     yum install -y libtool
     yum install -y gcc-c++ make automake gcc kernel-devel
     yum install -y bzip2-devel openssl-devel ncurses-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
+    yum install -y texinfo
 }
 
 function install_cmake() {
@@ -198,6 +199,34 @@ function install_gtags(){
     rm -rf global-6.6.8*
 }
 
+function install_gdb() {
+    #卸载gdb
+    yum remove gdb -y
+    
+    svn co svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python
+    if [ ! -d /etc/gdb ]
+    then
+        mkdir /etc/gdb
+    fi
+
+    if [ -f /etc/gdb/gdbinit ]
+    then
+        rm /etc/gdb/gdbinit
+    fi
+    
+    if [ ! -f /data/thirdparty/gdbinit ]
+    then
+        wget ftp://10.0.128.201/thirdparty/gdbinit
+    fi
+    
+    mv gdbinit /etc/gdb/gdbinit
+    
+    wget https://ftp.gnu.org/gnu/gdb/gdb-10.1.tar.gz --no-check-certificate
+    tar -xvf gdb-10.1.tar.gz
+    cd gdb-10.1
+    mkdir build && cd build
+    ../configure --prefix=/usr/local/gdb --with-python=/usr/bin/python --enable-tui=yes --with-system-gdbinit=/etc/gdb/gdbinit
+
 function install_nxx_evn() {
     #安装protoc
     wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip --no-check-certificate
@@ -233,6 +262,7 @@ function install_nxx_evn() {
     cp build_linux64/libxlua.so /usr/local/lib64/
     cp build_linux64/libxlua.so /usr/lib64/
     go env -w GO111MODULE=off
+}
 
 echo "请使用root权限运行此脚本"
 root_need
@@ -244,4 +274,6 @@ install_python3
 install_nodejs
 install_nvim
 install_gtags
-install_go_evn
+install_gdb
+install_nxx_evn
+
