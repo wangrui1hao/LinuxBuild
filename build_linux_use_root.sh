@@ -264,13 +264,14 @@ function install_gdb() {
     
     #安装beauty print
     if [ ! -d /data/thirdparty/python ]
+    then 
         svn co svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python
         if [ $? -gt 0  ];then
             echo "beauty print安装包下载失败 请手动执行"
             exit 1
         fi 
         mv -r python /data/thirdparty
-    then 
+    fi
 
     if [ ! -d /etc/gdb ]
     then
