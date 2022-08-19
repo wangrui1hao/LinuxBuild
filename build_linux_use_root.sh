@@ -25,6 +25,10 @@ function pre_install_env() {
 
 function install_cmake() {
     wget https://cmake.org/files/v3.10/cmake-3.10.0.tar.gz
+    if [ $? -gt 0  ];then
+        echo "cmake安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -zxvf cmake-3.10.0.tar.gz
     cd cmake-3.10.0
     ./bootstrap
@@ -36,6 +40,10 @@ function install_cmake() {
 
 function install_nodejs() {
     wget https://cdn.npmmirror.com/binaries/node/v16.16.0/node-v16.16.0-linux-x64.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "nodejs安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf node-v16.16.0-linux-x64.tar.gz
     mv node-v16.16.0-linux-x64 /usr/local/node.js
     ln -s /usr/local/node.js/bin/node /usr/bin/node
@@ -50,6 +58,10 @@ function install_nodejs() {
 
 function install_go() {
     wget https://dl.google.com/go/go1.16.2.linux-amd64.tar.gz
+    if [ $? -gt 0  ];then
+        echo "go安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -C /usr/local -xvf go1.16.2.linux-amd64.tar.gz
     echo "export PATH=/usr/local/go/bin:\$PATH" >> /etc/profile
     echo "export GOROOT=/usr/local/go" >> /etc/profile
@@ -63,6 +75,10 @@ function install_svn() {
 
     #安装apr
     wget https://dlcdn.apache.org//apr/apr-1.7.0.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "apr安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf apr-1.7.0.tar.gz
     cd apr-1.7.0
     mkdir build_dir && cd build_dir
@@ -73,6 +89,10 @@ function install_svn() {
 
     #安装apr-util
     wget https://dlcdn.apache.org//apr/apr-util-1.6.1.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "apr-util安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf apr-util-1.6.1.tar.gz
     cd apr-util-1.6.1
     mkdir build_dir && cd build_dir
@@ -83,6 +103,10 @@ function install_svn() {
 
     #安装sqlite3
     wget https://www.sqlite.org/2022/sqlite-autoconf-3390200.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "sqlite3安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf sqlite-autoconf-3390200.tar.gz
     cd sqlite-autoconf-3390200
     mkdir build && cd build
@@ -93,6 +117,10 @@ function install_svn() {
 
     #安裝zlib
     wget http://www.zlib.net/zlib-1.2.12.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "zlib安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf zlib-1.2.12.tar.gz
     cd zlib-1.2.12
     mkdir build && cd build
@@ -103,6 +131,10 @@ function install_svn() {
 
     #安装scons
     wget https://cfhcable.dl.sourceforge.net/project/scons/scons/2.3.0/scons-2.3.0.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "scons安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf scons-2.3.0.tar.gz
     cd scons-2.3.0
     python setup.py install
@@ -111,6 +143,10 @@ function install_svn() {
 
     #安裝serf
     wget https://www.apache.org/dist/serf/serf-1.3.9.tar.bz2 --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "serf安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf serf-1.3.9.tar.bz2
     cd serf-1.3.9
     scons PREFIX=/usr/local/serf APR=/usr/local/apr APU=/usr/local/apr-util
@@ -121,6 +157,10 @@ function install_svn() {
 
     #安裝svn
     wget https://dlcdn.apache.org/subversion/subversion-1.14.2.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "svn安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf tar -xvf subversion-1.14.2.tar.gz
     cd subversion-1.14.2
     mkdir build_dir && cd build_dir
@@ -134,6 +174,10 @@ function install_svn() {
 
 function install_python3() {
     curl -O https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz
+    if [ $? -gt 0  ];then
+        echo "python3安装包下载失败 请手动执行"
+        exit 1
+    fi 
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/yum --no-check-certificate
     chmod 771 yum
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/urlgrabber-ext-down --no-check-certificate
@@ -158,8 +202,6 @@ function install_python3() {
     ln -s /usr/local/python37/bin/pip3 /usr/bin/pip3
     mv ./yum /usr/bin/yum
     mv ./urlgrabber-ext-down /usr/libexec/urlgrabber-ext-down
-    
-    
 }
 
 function install_nvim() {
@@ -168,6 +210,10 @@ function install_nvim() {
     pip3 install pygments
     pip3 install neovim
     wget http://ftp.gnu.org/gnu/glibc/glibc-2.18.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "glibc安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf glibc-2.18.tar.gz
     cd glibc-2.18
     mkdir build && cd build
@@ -176,6 +222,10 @@ function install_nvim() {
     cd ../../
     rm -rf glibc-2.18*
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+    if [ $? -gt 0  ];then
+        echo "nvim安装包下载失败 请手动执行"
+        exit 1
+    fi 
     chmod 777 nvim.appimage
     yum remove -y vim
     rm -f /bin/vim
@@ -188,6 +238,10 @@ function install_nvim() {
 
 function install_gtags(){
     wget https://ftp.gnu.org/pub/gnu/global/global-6.6.8.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "gtags安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf global-6.6.8.tar.gz
     cd cd global-6.6.8
     mkdir build && cd build
@@ -211,6 +265,10 @@ function install_gdb() {
     #安装beauty print
     if [ ! -d /data/thirdparty/python ]
         svn co svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python
+        if [ $? -gt 0  ];then
+            echo "beauty print安装包下载失败 请手动执行"
+            exit 1
+        fi 
         mv -r python /data/thirdparty
     then 
 
@@ -225,6 +283,10 @@ function install_gdb() {
     
     #安装gdb
     wget https://ftp.gnu.org/gnu/gdb/gdb-10.1.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "gdb安装包下载失败 请手动执行"
+        exit 1
+    fi 
     tar -xvf gdb-10.1.tar.gz
     cd gdb-10.1
     mkdir build && cd build
@@ -239,6 +301,10 @@ function install_gdb() {
 function install_nxx_evn() {
     #安装protoc
     wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "protoc安装包下载失败 请手动执行"
+        exit 1
+    fi
     unzip protoc-3.6.1-linux-x86_64.zip
     cp cp bin/* /usr/local/bin/
     rm -rf bin include protoc-3.6.1-linux-x86_64.zip readme.txt
@@ -253,6 +319,10 @@ function install_nxx_evn() {
     
     #安装ctags
     git clone https://github.com/universal-ctags/ctags.git ctags
+    if [ $? -gt 0  ];then
+        echo "ctags安装包下载失败 请手动执行"
+        exit 1
+    fi
     ./autogen.sh
     mkdir build && cd build
     ../configure --prefix=/usr/local/ctags
@@ -265,6 +335,10 @@ function install_nxx_evn() {
     
     #安装xlua
     wget https://github.com/Tencent/xLua/archive/refs/tags/v2.1.14.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "xlua安装包下载失败 请手动执行"
+        exit 1
+    fi
     tar -xvf v2.1.14.tar.gz
     cd xLua-2.1.14/build
     sh make_linux64_lua53.sh
@@ -285,4 +359,3 @@ install_nvim
 install_gtags
 install_gdb
 install_nxx_evn
-
