@@ -31,16 +31,22 @@
 ```shell 
 curl https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/build_linux_use_root.sh | sudo bash
 ```
-2. 确认安装成功后，使用非`root`用户安装，执行完毕后重新打开终端执行后续操作
+2. 确认安装成功后，使用非`root`用户执行以下命令，过程中需要输入一次sudo密码，进行二进制拷贝操作，执行完毕后重新打开终端执行后续操作
 ```shell
 curl https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/build_linux_not_root.sh | bash
 ```
 3. 全部安装成功之后启动vim，这个时候第一次启动我的配置会自动检测有没有相关插件，进行安装
-4. 如果安装失败 vim 命令模式执行`:PlugInstall`
-5. 命令模式执行`:UpdateRemotePlugins`用于更新dfex目录树
-6. 命令模式执行`:CocInstall coc-sh`
-7. svn下载项目服务器代码与配置到相应目录
-8. 在bashrc或profile中添加GOPATH目录
+```shell
+#如果安装失败，在vim命令模式执行
+:PlugInstall
+
+#全部安装成功后，执行以下命令更新插件数据
+:UpdateRemotePlugins
+:CocInstall coc-sh
+```
+4. svn下载项目服务器代码与配置到相应目录
+5. 在bashrc或profile中添加GOPATH目录
+
 ## 使用说明
 脚本中已经按我的习惯配置好了vim快捷键，如有需要可在`~/.config/nvmi/setting`目录下，对相应插件进行快捷键定制、修改操作。
 > - **快捷键中存在Alt键，请在对应终端中开启Alt键作为Mate键的映射**
@@ -322,8 +328,10 @@ go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
 go get -u github.com/mailru/easyjson/...
 go get golang.org/x/tools/cmd/stringer
 go install golang.org/x/tools/gopls@latest
-cp go/bin/* /usr/local/bin/
 go env -w GO111MODULE=off
+
+#此处拷贝二进制需要sudo权限
+sudo cp go/bin/* /usr/local/bin/
 ```
 
 - nvim配置文件
