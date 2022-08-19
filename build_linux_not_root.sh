@@ -22,5 +22,5 @@ fi
 cd ~/.config
 
 echo "开始clone 远端的vim 配置"
-git clone https://github.com/CloudGuan/nvim-for-server.git nvim --depth=1 
+git clone https://github.com/wangrui1hao/nvim-for-server.git nvim --depth=1 
 echo "clone 完成 enjoy your vim"
