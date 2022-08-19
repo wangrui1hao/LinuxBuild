@@ -161,7 +161,7 @@ function install_svn() {
         echo "svn安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -xvf tar -xvf subversion-1.14.2.tar.gz
+    tar -xvf subversion-1.14.2.tar.gz
     cd subversion-1.14.2
     mkdir build_dir && cd build_dir
     ../configure --prefix=/usr/local/svn --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util --with-sqlite=/usr/local/sqlite --with-zlib=/usr/local/zlib --with-serf=/usr/local/serf --with-lz4=internal --with-utf8proc=internal
