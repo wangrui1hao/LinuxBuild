@@ -16,6 +16,7 @@ go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
 go get -u github.com/mailru/easyjson/...
 go get golang.org/x/tools/cmd/stringer
 go install golang.org/x/tools/gopls@latest
+go install github.com/go-delve/delve/cmd/dlv@latest
 go env -w GO111MODULE=off
 sudo cp go/bin/* /usr/local/bin/
 
