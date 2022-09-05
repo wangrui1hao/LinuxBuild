@@ -18,7 +18,8 @@ go get golang.org/x/tools/cmd/stringer
 go install golang.org/x/tools/gopls@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
 go env -w GO111MODULE=off
-sudo cp go/bin/* /usr/local/bin/
+sudo echo "export PATH=$HOME/go/bin:\$PATH" >> /etc/profile
+sudo source /etc/profile
 
 #拉取nvim配置
 yum install -y git
