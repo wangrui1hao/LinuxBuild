@@ -181,8 +181,9 @@ function install_python3() {
         exit 1
     fi 
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/yum --no-check-certificate
-    chmod 771 yum
+    chmod 775 yum
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/urlgrabber-ext-down --no-check-certificate
+	chmod 775 urlgrabber-ext-down
     tar -xvf Python-3.7.6.tgz
     cd Python-3.7.6
     mkdir build && cd build
