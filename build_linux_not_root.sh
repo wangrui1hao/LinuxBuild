@@ -14,6 +14,7 @@ cd ~/
 go get github.com/gogo/protobuf/protoc-gen-gofast
 go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
 go get -u github.com/mailru/easyjson/...
+go get -u golang.org/x/lint/golint
 go get golang.org/x/tools/cmd/stringer
 go install golang.org/x/tools/gopls@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
