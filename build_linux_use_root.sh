@@ -76,32 +76,32 @@ function install_svn() {
     yum remove -y svn
 
     #安装apr
-    wget https://dlcdn.apache.org//apr/apr-1.7.0.tar.gz --no-check-certificate
+    wget https://dlcdn.apache.org//apr/apr-1.7.2.tar.gz --no-check-certificate
     if [ $? -gt 0  ];then
         echo "apr安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -xvf apr-1.7.0.tar.gz
-    cd apr-1.7.0
+    tar -xvf apr-1.7.2.tar.gz
+    cd apr-1.7.2
     mkdir build_dir && cd build_dir
     ../configure --prefix=/usr/local/apr
     make -j8 && make install
     cd ../../
-    rm -rf apr-1.7.0*
+    rm -rf apr-1.7.2*
 
     #安装apr-util
-    wget https://dlcdn.apache.org//apr/apr-util-1.6.1.tar.gz --no-check-certificate
+    wget https://dlcdn.apache.org//apr/apr-util-1.6.3.tar.gz --no-check-certificate
     if [ $? -gt 0  ];then
         echo "apr-util安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -xvf apr-util-1.6.1.tar.gz
-    cd apr-util-1.6.1
+    tar -xvf apr-util-1.6.3.tar.gz
+    cd apr-util-1.6.3
     mkdir build_dir && cd build_dir
     ../configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr
     make -j8 && make install
     cd ../../
-    rm -rf apr-util-1.6.1*
+    rm -rf apr-util-1.6.3*
 
     #安装sqlite3
     wget https://www.sqlite.org/2022/sqlite-autoconf-3390200.tar.gz --no-check-certificate
@@ -118,18 +118,18 @@ function install_svn() {
     rm -rf sqlite-autoconf-3390200*
 
     #安裝zlib
-    wget http://www.zlib.net/zlib-1.2.12.tar.gz --no-check-certificate
+    wget http://www.zlib.net/zlib-1.2.13.tar.gz --no-check-certificate
     if [ $? -gt 0  ];then
         echo "zlib安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -xvf zlib-1.2.12.tar.gz
-    cd zlib-1.2.12
+    tar -xvf zlib-1.2.13.tar.gz
+    cd zlib-1.2.13
     mkdir build && cd build
     ../configure --prefix=/usr/local/zlib
     make -j8 && make install
     cd ../../
-    rm -rf zlib-1.2.12*
+    rm -rf zlib-1.2.13*
 
     #安装scons
     wget https://cfhcable.dl.sourceforge.net/project/scons/scons/2.3.0/scons-2.3.0.tar.gz --no-check-certificate
