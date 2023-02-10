@@ -21,6 +21,7 @@ function pre_install_env() {
     yum install -y gcc-c++ make automake gcc kernel-devel
     yum install -y bzip2-devel openssl-devel ncurses-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
     yum install -y texinfo
+	yum install -y bc
 }
 
 function install_cmake() {
