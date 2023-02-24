@@ -18,6 +18,7 @@ go get -u golang.org/x/lint/golint
 go get golang.org/x/tools/cmd/stringer
 go install golang.org/x/tools/gopls@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $HOME/go/bin v1.51.2
 echo "export PATH=\$HOME/go/bin:\$PATH" | sudo tee -a /etc/profile
 sudo source /etc/profile
 
