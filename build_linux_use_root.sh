@@ -324,20 +324,20 @@ function install_gdb() {
 
 function install_nxx_evn() {
     #安装ctags
-    git clone https://github.com/universal-ctags/ctags.git ctags
-    if [ $? -gt 0  ];then
-        echo "ctags安装包下载失败 请手动执行"
-        exit 1
-    fi
-    cd ctags
-    ./autogen.sh
-    mkdir build && cd build
-    ../configure --prefix=/usr/local/ctags
-    make -j8 && make install
-    echo "export PATH=/usr/local/ctags/bin:\$PATH" >> /etc/profile
-    source /etc/profile
-    cd ../../
-    rm -rf ctags
+    #git clone https://github.com/universal-ctags/ctags.git ctags
+    #if [ $? -gt 0  ];then
+    #    echo "ctags安装包下载失败 请手动执行"
+    #    exit 1
+    #fi
+    #cd ctags
+    #./autogen.sh
+    #mkdir build && cd build
+    #../configure --prefix=/usr/local/ctags
+    #make -j8 && make install
+    #echo "export PATH=/usr/local/ctags/bin:\$PATH" >> /etc/profile
+    #source /etc/profile
+    #cd ../../
+    #rm -rf ctags
     
     #拷贝protoc xlua.so，librsa.a
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/protoc --no-check-certificate
