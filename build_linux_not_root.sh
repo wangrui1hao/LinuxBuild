@@ -12,7 +12,9 @@ not_root_need
 #安装go相关
 cd ~/
 go get github.com/gogo/protobuf/protoc-gen-gofast
+export GO111MODULE=on
 go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
+export GO111MODULE=auto
 go get -u github.com/mailru/easyjson/...
 go get -u golang.org/x/lint/golint
 go get golang.org/x/tools/cmd/stringer
