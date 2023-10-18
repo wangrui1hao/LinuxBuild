@@ -40,13 +40,13 @@ function install_cmake() {
 }
 
 function install_nodejs() {
-    wget https://cdn.npmmirror.com/binaries/node/v16.16.0/node-v16.16.0-linux-x64.tar.gz --no-check-certificate
+    wget https://cdn.npmmirror.com/binaries/node/v16.18.0/node-v16.18.0-linux-x64.tar.gz --no-check-certificate
     if [ $? -gt 0  ];then
         echo "nodejs安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -xvf node-v16.16.0-linux-x64.tar.gz
-    mv node-v16.16.0-linux-x64 /usr/local/node.js
+    tar -xvf node-v16.18.0-linux-x64.tar.gz
+    mv node-v16.18.0-linux-x64 /usr/local/node.js
     ln -s /usr/local/node.js/bin/node /usr/bin/node
     ln -s /usr/local/node.js/bin/npm /usr/bin/npm
     npm install -g yarn
@@ -55,7 +55,7 @@ function install_nodejs() {
     echo "export PATH=/usr/local/node.js/bin:\$PATH" >> /etc/profile
     echo "export NODE_PATH=$NODE_HOME/lib/node_modules:\$PATH" >> /etc/profile
     source /etc/profile
-    rm -f node-v16.16.0-linux-x64.tar.gz
+    rm -f node-v16.18.0-linux-x64.tar.gz
 }
 
 function install_go() {
