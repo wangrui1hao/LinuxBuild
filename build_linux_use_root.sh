@@ -21,7 +21,7 @@ function pre_install_env() {
     yum install -y gcc-c++ make automake gcc kernel-devel
     yum install -y bzip2-devel openssl-devel ncurses-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
     yum install -y texinfo
-	yum install -y bc
+    yum install -y bc
 }
 
 function install_cmake() {
@@ -77,18 +77,18 @@ function install_svn() {
     yum remove -y svn
 
     #安装apr
-    wget https://dlcdn.apache.org//apr/apr-1.7.2.tar.gz --no-check-certificate
+    wget https://dlcdn.apache.org//apr/apr-1.7.4.tar.gz --no-check-certificate
     if [ $? -gt 0  ];then
         echo "apr安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -xvf apr-1.7.2.tar.gz
-    cd apr-1.7.2
+    tar -xvf apr-1.7.4.tar.gz
+    cd apr-1.7.4
     mkdir build_dir && cd build_dir
     ../configure --prefix=/usr/local/apr
     make -j8 && make install
     cd ../../
-    rm -rf apr-1.7.2*
+    rm -rf apr-1.7.4*
 
     #安装apr-util
     wget https://dlcdn.apache.org//apr/apr-util-1.6.3.tar.gz --no-check-certificate
@@ -119,18 +119,18 @@ function install_svn() {
     rm -rf sqlite-autoconf-3390200*
 
     #安裝zlib
-    wget http://www.zlib.net/zlib-1.2.13.tar.gz --no-check-certificate
+    wget http://www.zlib.net/zlib-1.3.tar.gz --no-check-certificate
     if [ $? -gt 0  ];then
         echo "zlib安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -xvf zlib-1.2.13.tar.gz
-    cd zlib-1.2.13
+    tar -xvf zlib-1.3.tar.gz
+    cd zlib-1.3
     mkdir build && cd build
     ../configure --prefix=/usr/local/zlib
     make -j8 && make install
     cd ../../
-    rm -rf zlib-1.2.13*
+    rm -rf zlib-1.3*
 
     #安装scons
     wget https://cfhcable.dl.sourceforge.net/project/scons/scons/2.3.0/scons-2.3.0.tar.gz --no-check-certificate
@@ -145,18 +145,18 @@ function install_svn() {
     rm -rf scons-2.3.0*
 
     #安裝serf
-    wget https://www.apache.org/dist/serf/serf-1.3.9.tar.bz2 --no-check-certificate
+    wget https://www.apache.org/dist/serf/serf-1.3.10.tar.bz2 --no-check-certificate
     if [ $? -gt 0  ];then
         echo "serf安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -xvf serf-1.3.9.tar.bz2
-    cd serf-1.3.9
+    tar -xvf serf-1.3.10.tar.bz2
+    cd serf-1.3.10
     scons PREFIX=/usr/local/serf APR=/usr/local/apr APU=/usr/local/apr-util
     scons install
     cp /usr/local/serf/lib/libserf-1.so* /usr/lib64/
     cd ../
-    rm -rf serf-1.3.9*
+    rm -rf serf-1.3.10*
 
     #安裝svn
     wget https://dlcdn.apache.org/subversion/subversion-1.14.2.tar.gz --no-check-certificate
@@ -204,8 +204,8 @@ function install_python3() {
     ln -s /usr/local/python37/bin/python3 /usr/bin/python 
     ln -s /usr/local/python37/bin/pip3 /usr/bin/pip
     ln -s /usr/local/python37/bin/pip3 /usr/bin/pip3
-    mv ./yum /usr/bin/yum
-    mv ./urlgrabber-ext-down /usr/libexec/urlgrabber-ext-down
+    mv -f ./yum /usr/bin/yum
+    mv -f ./urlgrabber-ext-down /usr/libexec/urlgrabber-ext-down
 }
 
 function install_nvim() {
@@ -213,18 +213,18 @@ function install_nvim() {
     pip3 install pynvim
     pip3 install pygments
     pip3 install neovim
-    wget http://ftp.gnu.org/gnu/glibc/glibc-2.18.tar.gz --no-check-certificate
-    if [ $? -gt 0  ];then
-        echo "glibc安装包下载失败 请手动执行"
-        exit 1
-    fi 
-    tar -xvf glibc-2.18.tar.gz
-    cd glibc-2.18
-    mkdir build && cd build
-    ../configure --prefix=/usr
-    make -j8 && make install
-    cd ../../
-    rm -rf glibc-2.18*
+    #wget http://ftp.gnu.org/gnu/glibc/glibc-2.18.tar.gz --no-check-certificate
+    #if [ $? -gt 0  ];then
+    #    echo "glibc安装包下载失败 请手动执行"
+    #    exit 1
+    #fi 
+    #tar -xvf glibc-2.18.tar.gz
+    #cd glibc-2.18
+    #mkdir build && cd build
+    #../configure --prefix=/usr
+    #make -j8 && make install
+    #cd ../../
+    #rm -rf glibc-2.18*
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
     if [ $? -gt 0  ];then
         echo "nvim安装包下载失败 请手动执行"
@@ -241,25 +241,30 @@ function install_nvim() {
 }
 
 function install_gtags(){
-    wget https://ftp.gnu.org/pub/gnu/global/global-6.6.8.tar.gz --no-check-certificate
+    wget https://ftp.gnu.org/pub/gnu/global/global-6.6.10.tar.gz --no-check-certificate
     if [ $? -gt 0  ];then
         echo "gtags安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -xvf global-6.6.8.tar.gz
-    cd global-6.6.8
+    tar -xvf global-6.6.10.tar.gz
+    cd global-6.6.10
     mkdir build && cd build
     ../configure --prefix=/usr/local/gtags --with-sqlite3=/usr/local/sqlite
     make -j8 && make install
     echo "export PATH=/usr/local/gtags/bin:\$PATH" >> /etc/profile
     source /etc/profile
     cd ../../
-    rm -rf global-6.6.8*
+    rm -rf global-6.6.10*
 }
 
 function install_gdb() {
     #卸载gdb
     yum remove gdb -y
+
+    if [ ! -d /data ]
+    then
+        mkdir /data
+    fi
     
     if [ ! -d /data/thirdparty ]
     then
@@ -274,7 +279,7 @@ function install_gdb() {
             echo "beauty print安装包下载失败 请手动执行"
             exit 1
         fi 
-        mv -r python /data/thirdparty
+        mv python /data/thirdparty
     fi
 
     if [ ! -d /etc/gdb ]
@@ -286,6 +291,20 @@ function install_gdb() {
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/gdbinit
     mv gdbinit /etc/gdb/gdbinit
     
+    #安装gmp
+    wget https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.gz --no-check-certificate
+    if [ $? -gt 0  ];then
+        echo "gmp安装包下载失败 请手动执行"
+        exit 1
+    fi
+    tar -xvf gmp-6.3.0.tar.gz
+    cd gmp-6.3.0
+    mkdir build && cd build
+    ../configure --prefix=/usr/local/gmp
+    make -j8 && make install
+    cd ../../
+    rm -rf gmp-6.3.0*
+    
     #安装gdb
     wget https://ftp.gnu.org/gnu/gdb/gdb-10.1.tar.gz --no-check-certificate
     if [ $? -gt 0  ];then
@@ -295,7 +314,7 @@ function install_gdb() {
     tar -xvf gdb-10.1.tar.gz
     cd gdb-10.1
     mkdir build && cd build
-    ../configure --prefix=/usr/local/gdb --with-python=/usr/bin/python2 --enable-tui=yes --with-system-gdbinit=/etc/gdb/gdbinit
+    ../configure --prefix=/usr/local/gdb --with-python=/usr/bin/python2 --enable-tui=yes --with-system-gdbinit=/etc/gdb/gdbinit --with-libgmp-prefix=/usr/local/gmp
     make -j8 && make install
     echo "export PATH=/usr/local/gdb/bin:\$PATH" >> /etc/profile
     source /etc/profile
