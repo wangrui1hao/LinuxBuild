@@ -59,17 +59,17 @@ function install_nodejs() {
 }
 
 function install_go() {
-    wget https://dl.google.com/go/go1.16.2.linux-amd64.tar.gz
+    wget https://go.dev/dl/go1.18.10.linux-amd64.tar.gz
     if [ $? -gt 0  ];then
         echo "go安装包下载失败 请手动执行"
         exit 1
     fi 
-    tar -C /usr/local -xvf go1.16.2.linux-amd64.tar.gz
+    tar -C /usr/local -xvf go1.18.10.linux-amd64.tar.gz
     echo "export PATH=/usr/local/go/bin:\$PATH" >> /etc/profile
     echo "export GOROOT=/usr/local/go" >> /etc/profile
     source /etc/profile
     sed -i 's/Defaults.*secure_path.*/&:\/usr\/local\/go\/bin/g' /etc/sudoers
-    rm -rf go1.16.2.linux-amd64.tar.gz
+    rm -rf go1.18.10.linux-amd64.tar.gz
 }
 
 function install_svn() {
