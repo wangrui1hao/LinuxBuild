@@ -22,6 +22,7 @@ function pre_install_env() {
     yum install -y bzip2-devel openssl-devel ncurses-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
     yum install -y texinfo
     yum install -y bc
+    yum install -y telnet psmisc
 }
 
 function install_cmake() {
@@ -324,20 +325,20 @@ function install_gdb() {
 
 function install_nxx_evn() {
     #安装ctags
-    #git clone https://github.com/universal-ctags/ctags.git ctags
-    #if [ $? -gt 0  ];then
-    #    echo "ctags安装包下载失败 请手动执行"
-    #    exit 1
-    #fi
-    #cd ctags
-    #./autogen.sh
-    #mkdir build && cd build
-    #../configure --prefix=/usr/local/ctags
-    #make -j8 && make install
-    #echo "export PATH=/usr/local/ctags/bin:\$PATH" >> /etc/profile
-    #source /etc/profile
-    #cd ../../
-    #rm -rf ctags
+    git clone https://github.com/universal-ctags/ctags.git ctags
+    if [ $? -gt 0  ];then
+        echo "ctags安装包下载失败 请手动执行"
+        exit 1
+    fi
+    cd ctags
+    ./autogen.sh
+    mkdir build && cd build
+    ../configure --prefix=/usr/local/ctags
+    make -j8 && make install
+    echo "export PATH=/usr/local/ctags/bin:\$PATH" >> /etc/profile
+    source /etc/profile
+    cd ../../
+    rm -rf ctags
     
     #拷贝protoc xlua.so，librsa.a
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/protoc --no-check-certificate
@@ -350,6 +351,29 @@ function install_nxx_evn() {
     
     wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/librsa.a --no-check-certificate
     mv librsa.a /usr/local/lib/
+
+    #安装consul
+    yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+    yum -y install consul
+
+    mkdir /data/Consul
+    mkdir /data/Consul/data
+    mkdir /data/Consul/conf
+    mkdir /data/Consul/logs
+
+    #安装redis
+    wget https://download.redis.io/redis-stable.tar.gz
+    if [ $? -gt 0  ];then
+        echo "redis安装包下载失败 请手动执行"
+        exit 1
+    fi
+
+    tar -xzvf redis-stable.tar.gz
+    cd redis-stable
+    make -j8 && make install
+    mkdir /data/Redis && mkdir /data/Redis/conf
+    cp redis.conf /data/Redis/conf/redis.conf
+    cd ../ && rm -rf redis-stable*
 }
 
 echo "请使用root权限运行此脚本"
