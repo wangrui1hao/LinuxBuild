@@ -22,7 +22,7 @@ function pre_install_env() {
     yum install -y bzip2-devel openssl-devel ncurses-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
     yum install -y texinfo
     yum install -y bc
-    yum install -y telnet psmisc
+    yum install -y telnet psmisc lsof
 }
 
 function install_cmake() {
@@ -323,6 +323,12 @@ function install_gdb() {
     rm -rf gdb-10.1*
 }
 
+function install_systemctl() {
+    mv /usr/bin/systemctl /usr/bin/systemctl.old
+    curl https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py > /usr/bin/systemctl
+    chmod +x /usr/bin/systemctl
+}
+
 function install_nxx_evn() {
     #安装ctags
     git clone https://github.com/universal-ctags/ctags.git ctags
@@ -387,4 +393,5 @@ install_nodejs
 install_nvim
 install_gtags
 install_gdb
+install_systemctl
 install_nxx_evn
