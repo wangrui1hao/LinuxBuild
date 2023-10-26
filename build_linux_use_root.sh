@@ -167,9 +167,6 @@ function install_gcc() {
         echo $app_name"-"$app_version" is installed, skip..."
     fi
 
-    # 卸载自带的gcc
-    yum remove gcc -y
-
     # 下载并编译
     wget $download_path --no-check-certificate && \
     tar -xvf $app_name"-"$app_version".tar.xz" && \
