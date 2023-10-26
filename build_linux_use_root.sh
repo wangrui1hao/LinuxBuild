@@ -170,6 +170,7 @@ function install_gcc() {
     # 卸载自带的gcc
     yum remove gcc -y
 
+    # 下载并编译
     wget $download_path --no-check-certificate && \
     tar -xvf $app_name"-"$app_version".tar.xz" && \
     cd $app_name"-"$app_version && \
@@ -177,7 +178,14 @@ function install_gcc() {
     ../configure --prefix=/usr/local/$app_name"-"$app_version --enable-bootstrap --disable-multilib --enable-bootstrap --enable-default-pie \
         --enable-default-ssp --disable-fixincludes --enable-languages=c,c++,go --with-zlib=/usr/local/zlib \
         --with-gmp=/usr/local/gmp --with-mpfr=/usr/local/mpfr --with-mpc=/usr/local/mpc && \
-    make -j8 && make install && \
+    make -j8
+    check_success
+
+    # 卸载自带的gcc
+    yum remove gcc -y
+
+    # 开始安装
+    make install && \
     ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     mv /usr/local/$app_name/bin/go /usr/local/$app_name/bin/gcc-go && \
     mv /usr/local/$app_name/bin/gofmt /usr/local/$app_name/bin/gcc-gofmt && \
