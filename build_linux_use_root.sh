@@ -188,7 +188,7 @@ function install_gcc() {
     mv /usr/local/$app_name/bin/go /usr/local/$app_name/bin/gcc-go && \
     mv /usr/local/$app_name/bin/gofmt /usr/local/$app_name/bin/gcc-gofmt && \
     echo "/usr/local/"$app_name"/lib64" >> /etc/ld.so.conf.d/gnu.conf && \
-    echo "export PATH=/usr/local/"$app_name"/bin:$PATH" >> /etc/profile && \
+    echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     ln -s /usr/local/$app_name/include /usr/include/$app_name && \
     source /etc/profile && ldconfig && \
     cd ../../ && rm -rf $app_name"-"$app_version*
@@ -252,7 +252,7 @@ function install_gdb() {
         --with-libmpc-prefix=/usr/local/mpc --with-libmpfr-prefix=/usr/local/mpfr && \
     make -j8 && make install && \
     ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
-    echo "export PATH=/usr/local/"$app_name"/bin:$PATH" >> /etc/profile && \
+    echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     source /etc/profile && \
     cd ../../ && rm -rf $app_name"-"$app_version*
     check_success
