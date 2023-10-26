@@ -23,7 +23,7 @@ function pre_install_env() {
     yum install -y gcc-c++ make automake gcc kernel-devel
     yum install -y ncurses-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
     yum install -y readline-devel texinfo bc
-    yum install -y openssl-devel telnet psmisc lsof
+    yum install -y openssl-devel telnet psmisc lsof openssh-server openssh-clients openssh
 }
 
 # 安装cmake
@@ -143,7 +143,7 @@ function install_gnu_tool() {
         check_success
 
         if [ -d /usr/include/$app_name ]; then
-            mv -r /usr/include/$app_name /usr/include/$app_name.back
+            mv -f /usr/include/$app_name /usr/include/$app_name.back
             check_success
         fi
 
@@ -168,7 +168,7 @@ function install_gcc() {
     fi
 
     # 卸载自带的gcc
-    yum remove -y gcc 
+    yum remove gcc -y
 
     wget $download_path --no-check-certificate && \
     tar -xvf $app_name"-"$app_version".tar.xz" && \
