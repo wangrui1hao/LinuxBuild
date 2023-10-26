@@ -79,7 +79,7 @@ function install_gnu_tool() {
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
         make -j8 && make install && \
         ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
-        echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gun.conf && \
+        echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         ldconfig && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
@@ -99,7 +99,7 @@ function install_gnu_tool() {
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-gmp=/usr/local/gmp && \
         make -j8 && make install && \
         ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
-        echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gun.conf && \
+        echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         ldconfig && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
@@ -119,7 +119,7 @@ function install_gnu_tool() {
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-gmp=/usr/local/gmp --with-mpfr=/usr/local/mpfr && \
         make -j8 && make install && \
         ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
-        echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gun.conf && \
+        echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         ldconfig && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
@@ -139,7 +139,8 @@ function install_gnu_tool() {
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
         make -j8 && make install && \
         ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
-        echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gun.conf
+        echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
+        rm -f /usr/lib64/libreadline.so
         check_success
 
         if [ -d /usr/include/$app_name ]; then
@@ -186,7 +187,7 @@ function install_gcc() {
     ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     mv /usr/local/$app_name/bin/go /usr/local/$app_name/bin/gcc-go && \
     mv /usr/local/$app_name/bin/gofmt /usr/local/$app_name/bin/gcc-gofmt && \
-    echo "/usr/local/"$app_name"/lib64" >> /etc/ld.so.conf.d/gun.conf && \
+    echo "/usr/local/"$app_name"/lib64" >> /etc/ld.so.conf.d/gnu.conf && \
     echo "export PATH=/usr/local/"$app_name"/bin:$PATH" >> /etc/profile && \
     ln -s /usr/local/$app_name/include /usr/include/$app_name && \
     source /etc/profile && ldconfig && \
@@ -493,7 +494,7 @@ function install_nvim() {
     check_success
 }
 
-# 安装gun global
+# 安装gnu global
 function install_gtags(){
     app_name="global"
     app_version="6.6.10"
