@@ -12,13 +12,14 @@ not_root_need
 #安装go相关
 cd ~/
 go get github.com/gogo/protobuf/protoc-gen-gofast
-go install github.com/golang/protobuf/protoc-gen-go@v1.3.2
-go install github.com/mailru/easyjson/...
-go get -u golang.org/x/lint/golint
-go get golang.org/x/tools/cmd/stringer
+#go install github.com/golang/protobuf/protoc-gen-go@v1.3.2
+go install github.com/golang/protobuf/protoc-gen-go@latest
+go install github.com/mailru/easyjson/...@latest
+#go get -u golang.org/x/lint/golint
+go install golang.org/x/tools/cmd/stringer@latest
 go install golang.org/x/tools/gopls@latest
 go install github.com/go-delve/delve/cmd/dlv@latest
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $HOME/go/bin v1.54.2
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $HOME/go/bin v1.55.0
 echo "export PATH=\$HOME/go/bin:\$PATH" | sudo tee -a /etc/profile
 
 #拉取nvim配置
