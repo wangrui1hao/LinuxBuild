@@ -365,8 +365,7 @@ function install_svn() {
     app_name="scons"
     app_version="2.3.0"
     download_path="https://cfhcable.dl.sourceforge.net/project/"$app_name"/"$app_name"/"$app_version"/"$app_name"-"$app_version".tar.gz"
-    is_installed=`$app_name -v 2>&1 | grep version | awk '{print (match($0, '$app_version')>0)}'`
-    if [ -n $is_installed ] && [ $is_installed == "1" ]; then
+    if [ -f /usr/bin/$app_name ];then
         echo $app_name"-"$app_version" is installed, skip..."
     else
         wget $download_path --no-check-certificate && \
