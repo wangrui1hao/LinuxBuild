@@ -101,7 +101,9 @@ if [ -d ~/.config/nvim ]; then
 fi
 if [ $need_pull_nvim == "1" ]; then
     mkdir -p ~/.config && rm -rf ~/.config/nvim && \
-    cd ~/.config && git clone https://github.com/wangrui1hao/nvim-for-server.git nvim --depth=1 
+    cd ~/.config && git clone https://github.com/wangrui1hao/nvim-for-server.git nvim --depth=1 && \
+    cd ~/.config/nvim/plugged/coc.nvim && \
+    source /etc/profile && npm ci
     check_success
 fi
 
