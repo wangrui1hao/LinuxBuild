@@ -25,12 +25,20 @@ function pre_install_env() {
         yum install -y gcc-c++ gcc libtool
     fi
 
+    # openssl已安装检测
+    openssl_version="1.1.1w"
+    openssl_installed=`openssl version 2>&1 | awk '{print(match($0, "'$openssl_version'")>0)}'`
+    if [ -z $openssl_installed ] || [ $openssl_installed == "0" ]; then
+        yum install -y openssl-devel
+    fi
+
+
     yum install -y curl-devel mysql-devel zlib-devel screen wget git fuse fuse-devel
     yum install -y bzip2 bzip2-devel zip unzip
     yum install -y make automake kernel-devel
     yum install -y ncurses-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
     yum install -y readline-devel texinfo bc
-    yum install -y openssl-devel telnet psmisc lsof openssh-server openssh-clients openssh
+    yum install -y telnet psmisc lsof openssh-server openssh-clients openssh
 }
 
 # 安装cmake
@@ -188,7 +196,7 @@ function install_gcc() {
     check_success
 
     # 卸载自带的gcc
-    yum remove gcc -y
+    yum remove gcc libtool -y
     rpm -e --nodeps libgcc
 
     # 开始安装
@@ -200,6 +208,7 @@ function install_gcc() {
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     mv -f /usr/local/$app_name/lib64/*gdb.py /usr/share/gdb/auto-load/usr/lib64/ && \
     ln -sfn /usr/local/$app_name/include /usr/include/$app_name && \
+    rm -f /usr/lib64/libstdc++.so.6 && \
     source /etc/profile && ldconfig && \
     cd ../../ && rm -rf $app_name"-"$app_version*
     check_success
@@ -536,6 +545,36 @@ function install_systemctl() {
     check_success
 }
 
+# 安装openssl
+function install_openssl() {
+    app_name="openssl"
+    app_version="1.1.1w"
+    download_path="https://www.openssl.org/source/"$app_name"-"$app_version".tar.gz"
+
+    # 已安装检测
+    if [ -d /usr/local/$app_name-$app_version ]; then
+        echo $app_name"-"$app_version" is installed, skip..."
+        return 0
+    fi
+
+    wget $download_path --no-check-certificate && \
+    tar -xvf $app_name"-"$app_version".tar.gz" && \
+    cd $app_name"-"$app_version && \
+    mkdir build && cd build && \
+    ../config --prefix=/usr/local/$app_name"-"$app_version && \
+    make -j8 && make install
+    check_success
+
+    yum remove openssl openssl-devel -y
+
+    ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+    echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
+    source /etc/profile && \
+    cd ../../ && rm -rf $app_name"-"$app_version*
+    check_success
+
+}
+
 # 安装nxx所需环境
 function install_nxx_evn() {
     # 安装ctags
@@ -619,6 +658,7 @@ function main() {
     install_nvim && \
     install_gtags && \
     install_systemctl && \
+    install_openssl && \
     install_nxx_evn
 
     check_success
