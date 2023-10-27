@@ -18,9 +18,16 @@ function root_need() {
 
 # 基础环境安装
 function pre_install_env() {
+    # gcc已安装检测
+    gcc_version="13.2.0"
+    gcc_installed=`gcc -v 2>&1 | grep version | awk '{print(match($0, "'$gcc_version'")>0)}'`
+    if [ -z $gcc_installed ] || [ $gcc_installed == "0" ]; then
+        yum install -y gcc-c++ gcc 
+    fi
+
     yum install -y curl-devel mysql-devel zlib-devel screen wget git fuse fuse-devel libtool 
     yum install -y bzip2 bzip2-devel zip unzip
-    yum install -y gcc-c++ make automake gcc kernel-devel
+    yum install -y make automake kernel-devel
     yum install -y ncurses-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
     yum install -y readline-devel texinfo bc
     yum install -y openssl-devel telnet psmisc lsof openssh-server openssh-clients openssh
@@ -182,6 +189,7 @@ function install_gcc() {
 
     # 卸载自带的gcc
     yum remove gcc -y
+    rpm -e --nodeps libgcc
 
     # 开始安装
     make install && \
