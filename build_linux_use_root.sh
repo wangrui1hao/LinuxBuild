@@ -467,7 +467,7 @@ function install_python3() {
 function install_nodejs() {
     app_name="node"
     app_version="v16.18.0"
-    download_path="https://cdn.npmmirror.com/binaries/"$app_name"/"$app_version"/"$app_name"-"$app_name"-linux-x64.tar.gz"
+    download_path="https://cdn.npmmirror.com/binaries/"$app_name"/"$app_version"/"$app_name"-"$app_version"-linux-x64.tar.gz"
 
     # 已安装检测
     if [ -d /usr/local/$app_name-$app_version ]; then
