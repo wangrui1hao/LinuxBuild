@@ -619,7 +619,7 @@ function install_nxx_evn() {
     fi
 
 
-    #安装redis
+    # 安装redis
     has_redis=`redis-cli -v 2>&1 | grep "redis-cli "`
     if [ -z "$has_redis" ]; then
         wget https://download.redis.io/redis-stable.tar.gz && \
@@ -630,6 +630,16 @@ function install_nxx_evn() {
         cp redis.conf /data/Redis/conf/redis.conf && \
         cd ../ && rm -rf redis-stable*
         check_success
+    fi
+
+    # 安装mysql
+    has_mysql=`mysql --version 2>&1 | grep "5.7"`
+    if [ -z "$has_mysql" ]; then
+        rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022 && \
+        wget http://repo.mysql.com/mysql57-community-release-el7-11.noarch.rpm && \
+        rpm -Uvh mysql57-community-release-el7-11.noarch.rpm && \
+        yum install -y mysql-community-server && \
+        rm -f mysql57-community-release-el7-11.noarch.rpm
     fi
 }
 
