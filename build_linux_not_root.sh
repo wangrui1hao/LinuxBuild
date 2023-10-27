@@ -17,6 +17,7 @@ function not_root_need() {
 }
 
 not_root_need
+source /etc/profile && ldconfig
 
 # 递归修改/data目录归属权
 cd ~ && sudo chown -R $USER:$USER /data
@@ -102,8 +103,7 @@ fi
 if [ $need_pull_nvim == "1" ]; then
     mkdir -p ~/.config && rm -rf ~/.config/nvim && \
     cd ~/.config && git clone https://github.com/wangrui1hao/nvim-for-server.git nvim --depth=1 && \
-    cd ~/.config/nvim/plugged/coc.nvim && \
-    source /etc/profile && npm ci
+    cd ~/.config/nvim/plugged/coc.nvim && npm ci
     check_success
 fi
 
