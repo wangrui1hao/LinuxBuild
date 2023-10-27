@@ -111,3 +111,7 @@ if [ ! -f ~/.ssh/config ]; then
     wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/ssh_config -O config
     check_success
 fi
+
+echo "************************************************"
+echo "*用户基础环境安装完成，请参照README进行后续配置*"
+echo "************************************************"
