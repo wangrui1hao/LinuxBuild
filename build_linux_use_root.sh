@@ -22,10 +22,10 @@ function pre_install_env() {
     gcc_version="13.2.0"
     gcc_installed=`gcc -v 2>&1 | grep version | awk '{print(match($0, "'$gcc_version'")>0)}'`
     if [ -z $gcc_installed ] || [ $gcc_installed == "0" ]; then
-        yum install -y gcc-c++ gcc 
+        yum install -y gcc-c++ gcc libtool
     fi
 
-    yum install -y curl-devel mysql-devel zlib-devel screen wget git fuse fuse-devel libtool 
+    yum install -y curl-devel mysql-devel zlib-devel screen wget git fuse fuse-devel
     yum install -y bzip2 bzip2-devel zip unzip
     yum install -y make automake kernel-devel
     yum install -y ncurses-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
@@ -610,9 +610,9 @@ function main() {
     install_cmake && \
     install_gnu_tool && \
     install_gcc && \
-    install_gdb && \
     install_go && \
     install_svn && \
+    install_gdb && \
     install_python3 && \
     install_nodejs && \
     install_nvim && \
