@@ -476,7 +476,7 @@ function install_nodejs() {
     echo "export NODE_PATH=$NODE_HOME/lib/node_modules:\$PATH" >> /etc/profile && \
     source /etc/profile && \
     npm install -g yarn neovim && \
-    rm -f $app_name"-"$app_version"*"
+    rm -rf $app_name"-"$app_version"*"
     check_success
 }
 
@@ -663,6 +663,10 @@ function main() {
     install_nxx_evn
 
     check_success
+
+    echo "************************************************************"
+    echo "*服务器基础环境安装完成，请切换非root用户，并执行下一步脚本*"
+    echo "************************************************************"
 }
 
 main
