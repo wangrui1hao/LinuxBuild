@@ -581,7 +581,8 @@ function install_nxx_evn() {
     fi
     
     # 设置个人链接库
-    if [ -z `cat /etc/ld.so.conf | grep "/usr/local/lib"` ]; then
+    has_lib=`cat /etc/ld.so.conf | grep "/usr/local/lib"`
+    if [ -z "$has_lib" ]; then
         echo "/usr/local/lib" >> /etc/ld.so.conf
         check_success
     fi
@@ -606,7 +607,8 @@ function install_nxx_evn() {
     fi
 
     #安装consul
-    if [ -z `consul -v 2>&1 | grep "Consul"` ]; then
+    has_consul=`consul -v 2>&1 | grep "Consul"`
+    if [ -z "$has_consul" ]; then
         sed -i 's@#!/usr/bin/python @#!/usr/bin/python2 @g' /usr/bin/yum-config-manager && \
         yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo && \
         yum -y install consul && \
@@ -618,7 +620,8 @@ function install_nxx_evn() {
 
 
     #安装redis
-    if [ -z `redis-cli -v 2>&1 | grep "redis-cli "` ]; then
+    has_redis=`redis-cli -v 2>&1 | grep "redis-cli "`
+    if [ -z "$has_redis" ]; then
         wget https://download.redis.io/redis-stable.tar.gz && \
         tar -xzvf redis-stable.tar.gz && \
         cd redis-stable && \
