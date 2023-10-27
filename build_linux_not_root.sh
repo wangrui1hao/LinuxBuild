@@ -22,6 +22,16 @@ not_root_need
 cd ~ && sudo chown -R $USER:$USER /data
 check_success
 
+# bashrc
+is_install=`cat ~/.bashrc | grep "bashrc_version"`
+if [ -z "$is_install" ]; then
+    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/bashrc -O ~/bashrc && \
+    mv -f ~/.bashrc ~/.bashrc_back && \
+    mv ~/bashrc ~/.bashrc && \
+    source ~/.bashrc
+    check_success
+fi
+
 # protoc-gen-gofast
 is_install=`ls $HOME/go/bin 2>&1 | grep protoc-gen-gofast`
 if [ -z "$is_install" ]; then
@@ -76,16 +86,6 @@ is_install=`cat /etc/profile | grep "HOME/go/bin"`
 if [ -z "$is_install" ]; then
     echo "export PATH=\$HOME/go/bin:\$PATH" | sudo tee -a /etc/profile && \
     source /etc/profile
-    check_success
-fi
-
-# bashrc
-is_install=`cat ~/.bashrc | grep "bashrc_version"`
-if [ -z "$is_install" ]; then
-    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/bashrc -O ~/bashrc && \
-    mv -f ~/.bashrc ~/.bashrc_back && \
-    mv ~/bashrc ~/.bashrc && \
-    source ~/.bashrc
     check_success
 fi
 
