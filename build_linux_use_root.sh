@@ -433,7 +433,7 @@ function install_python3() {
     fi
 
     wget $download_path --no-check-certificate && \
-    tar -xvf "Python-"$app_version".tar.gz" && \
+    tar -xvf "Python-"$app_version".tgz" && \
     cd "Python-"$app_version && \
     mkdir build && cd build && \
     ../configure --prefix=/usr/local/$app_name"-"$app_version --enable-shared && \
