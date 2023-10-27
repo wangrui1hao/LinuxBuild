@@ -166,6 +166,7 @@ function install_gcc() {
     # 已安装检测
     if [ -d /usr/local/$app_name-$app_version ]; then
         echo $app_name"-"$app_version" is installed, skip..."
+        return 0
     fi
 
     # 下载并编译
@@ -188,7 +189,7 @@ function install_gcc() {
     mv /usr/local/$app_name/bin/go /usr/local/$app_name/bin/gcc-go && \
     mv /usr/local/$app_name/bin/gofmt /usr/local/$app_name/bin/gcc-gofmt && \
     echo "/usr/local/"$app_name"/lib64" >> /etc/ld.so.conf.d/gnu.conf && \
-    echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
+    echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     ln -s /usr/local/$app_name/include /usr/include/$app_name && \
     source /etc/profile && ldconfig && \
     cd ../../ && rm -rf $app_name"-"$app_version*
@@ -204,6 +205,7 @@ function install_gdb() {
     # 已安装检测
     if [ -d /usr/local/$app_name-$app_version ]; then
         echo $app_name"-"$app_version" is installed, skip..."
+        return 0
     fi
 
     # 卸载自带的gdb
