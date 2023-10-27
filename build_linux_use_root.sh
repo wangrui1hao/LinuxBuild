@@ -208,6 +208,7 @@ function install_gcc() {
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     mv -f /usr/local/$app_name/lib64/*gdb.py /usr/share/gdb/auto-load/usr/lib64/ && \
     ln -sfn /usr/local/$app_name/include /usr/include/$app_name && \
+    ln -sfn /usr/include/$app_name/bin/$app_name /usr/bin/$app_name && \
     rm -f /usr/lib64/libstdc++.so.6 && \
     source /etc/profile && ldconfig && \
     cd ../../ && rm -rf $app_name"-"$app_version*
