@@ -451,6 +451,7 @@ function install_python3() {
     ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/$app_name.conf && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
+    ln -sfn /usr/local/"$app_name"/bin/$app_name /usr/bin/python && \
     source /etc/profile && ldconfig && \
     cd ../../ && rm -rf "Python-"$app_version*
     check_success
@@ -570,6 +571,7 @@ function install_openssl() {
 
     ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
+    echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/$app_name.conf && \
     source /etc/profile && \
     cd ../../ && rm -rf $app_name"-"$app_version*
     check_success
