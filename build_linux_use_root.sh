@@ -41,7 +41,7 @@ function install_cmake() {
 
     # 已安装检测
     is_installed=`cmake --version 2>&1 | grep version | awk '{print (match($0, '$app_version')>0)}'`
-    if [ -z $is_installed ] || [ $is_installed == "0" ]; then
+    if [ -n $is_installed ] && [ $is_installed == "1" ]; then
       echo $app_name"-"$app_version" is installed, skip..."
       return 0
     fi
@@ -67,7 +67,7 @@ function install_gnu_tool() {
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
         make -j8 && make install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
     else
@@ -85,7 +85,7 @@ function install_gnu_tool() {
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
         make -j8 && make install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         ldconfig && \
         cd ../../ && rm -rf $app_name"-"$app_version*
@@ -105,7 +105,7 @@ function install_gnu_tool() {
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-gmp=/usr/local/gmp && \
         make -j8 && make install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         ldconfig && \
         cd ../../ && rm -rf $app_name"-"$app_version*
@@ -125,7 +125,7 @@ function install_gnu_tool() {
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-gmp=/usr/local/gmp --with-mpfr=/usr/local/mpfr && \
         make -j8 && make install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         ldconfig && \
         cd ../../ && rm -rf $app_name"-"$app_version*
@@ -145,7 +145,7 @@ function install_gnu_tool() {
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
         make -j8 && make install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         rm -f /usr/lib64/libreadline.so
         check_success
@@ -155,7 +155,7 @@ function install_gnu_tool() {
             check_success
         fi
 
-        ln -s /usr/local/$app_name/include/$app_name /usr/include/$app_name && \
+        ln -sfn /usr/local/$app_name/include/$app_name /usr/include/$app_name && \
         ldconfig && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
@@ -193,13 +193,13 @@ function install_gcc() {
 
     # 开始安装
     make install && \
-    ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+    ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     mv /usr/local/$app_name/bin/go /usr/local/$app_name/bin/gcc-go && \
     mv /usr/local/$app_name/bin/gofmt /usr/local/$app_name/bin/gcc-gofmt && \
     echo "/usr/local/"$app_name"/lib64" >> /etc/ld.so.conf.d/gnu.conf && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     mv -f /usr/local/$app_name/lib64/*gdb.py /usr/share/gdb/auto-load/usr/lib64/ && \
-    ln -s /usr/local/$app_name/include /usr/include/$app_name && \
+    ln -sfn /usr/local/$app_name/include /usr/include/$app_name && \
     source /etc/profile && ldconfig && \
     cd ../../ && rm -rf $app_name"-"$app_version*
     check_success
@@ -257,7 +257,7 @@ function install_gdb() {
         --with-libpython-prefix=/usr/local/python3 --with-system-readline=/usr/local/readline --with-libgmp-prefix=/usr/local/gmp \
         --with-libmpc-prefix=/usr/local/mpc --with-libmpfr-prefix=/usr/local/mpfr && \
     make -j8 && make install && \
-    ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+    ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     source /etc/profile && \
     cd ../../ && rm -rf $app_name"-"$app_version*
@@ -279,7 +279,7 @@ function install_go() {
     wget $download_path --no-check-certificate && mkdir temp_go && \
     tar -C ./temp_go -xvf $app_name$app_version".linux-amd64.tar.gz" && \
     mv -f ./temp_go/$app_name /usr/local/$app_name"-"$app_version
-    ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+    ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     echo "export GOROOT=/usr/local/"$app_name >> /etc/profile && \
     source /etc/profile && \
@@ -304,7 +304,7 @@ function install_svn() {
         mkdir build_dir && cd build_dir && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
         make -j8 && make install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
     else
@@ -322,7 +322,7 @@ function install_svn() {
         mkdir build_dir && cd build_dir && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-apr=/usr/local/apr && \
         make -j8 && make install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
     else
@@ -343,7 +343,7 @@ function install_svn() {
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
         make -j8 && make install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/$app_name.conf && \
         source /etc/profile && ldconfig && \
@@ -358,7 +358,7 @@ function install_svn() {
     app_version="2.3.0"
     download_path="https://cfhcable.dl.sourceforge.net/project/"$app_name"/"$app_name"/"$app_version"/"$app_name"-"$app_version".tar.gz"
     is_installed=`$app_name -v 2>&1 | grep version | awk '{print (match($0, '$app_version')>0)}'`
-    if [ -z $is_installed ] || [ $is_installed == "0" ]; then
+    if [ -n $is_installed ] && [ $is_installed == "1" ]; then
         echo $app_name"-"$app_version" is installed, skip..."
     else
         wget $download_path --no-check-certificate && \
@@ -379,7 +379,7 @@ function install_svn() {
         cd $app_name"-"$app_version && \
         scons PREFIX=/usr/local/$app_name"-"$app_version APR=/usr/local/apr APU=/usr/local/apr-util && \
         scons install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/$app_name.conf && \
         ldconfig && \
         cd ../ && rm -rf $app_name"-"$app_version*
@@ -400,7 +400,7 @@ function install_svn() {
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util \
             --with-sqlite=/usr/local/sqlite3 --with-zlib=/usr/local/zlib --with-serf=/usr/local/serf --with-lz4=internal --with-utf8proc=internal && \
         make -j8 && make install && \
-        ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+        ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile
         source /etc/profile && \
         cd ../../ && rm -rf $app_name"-"$app_version*
@@ -438,7 +438,7 @@ function install_python3() {
         mv $pypath $Sp/python_bak
     fi
 
-    ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+    ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/$app_name.conf && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     source /etc/profile && ldconfig && \
@@ -468,7 +468,7 @@ function install_nodejs() {
     wget $download_path --no-check-certificate && \
     tar -xvf $app_name"-"$app_version"-linux-x64.tar.gz" && \
     mv $app_name"-"$app_version"-linux-x64" /usr/local/$app_name"-"$app_version && \
-    ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+    ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export NODE_HOME=/usr/local/"$app_name >> /etc/profile && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     echo "export NODE_PATH=$NODE_HOME/lib/node_modules:\$PATH" >> /etc/profile && \
@@ -495,8 +495,8 @@ function install_nvim() {
     chmod 777 nvim.appimage && \
     mv nvim.appimage /usr/bin/nvim.appimage && \
     rm -f /bin/vim /bin/vi && \
-    ln -s /usr/bin/nvim.appimage /bin/vim && \
-    ln -s /usr/bin/nvim.appimage /bin/vi && \
+    ln -sfn /usr/bin/nvim.appimage /bin/vim && \
+    ln -sfn /usr/bin/nvim.appimage /bin/vi && \
     npm i -g bash-language-server
     check_success
 }
@@ -519,7 +519,7 @@ function install_gtags(){
     mkdir build && cd build && \
     ../configure --prefix=/usr/local/$app_name"-"$app_version --with-sqlite3=/usr/local/sqlite3 && \
     make -j8 && make install && \
-    ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+    ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     source /etc/profile && \
     cd ../../ && rm -rf $app_name"-"$app_version*
