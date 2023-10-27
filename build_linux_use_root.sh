@@ -25,18 +25,11 @@ function pre_install_env() {
         yum install -y gcc-c++ gcc libtool
     fi
 
-    # openssl已安装检测
-    openssl_version="1.1.1w"
-    if [ ! -d /usr/local/openssl-$openssl_version ]; then
-        echo "openssl not install"
-        yum install -y openssl-devel mysql-devel
-    fi
-
     yum install -y curl-devel zlib-devel screen wget git fuse fuse-devel \
         bzip2 bzip2-devel zip unzip make automake kernel-devel ncurses-devel \
         tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel \
         python-devel readline-devel texinfo bc telnet psmisc lsof \
-        openssh-server openssh-clients openssh
+        openssh-server openssh-clients openssh openssl-devel mysql-devel
 }
 
 # 安装cmake
@@ -207,6 +200,7 @@ function install_gcc() {
     mv -f /usr/local/$app_name/lib64/*gdb.py /usr/share/gdb/auto-load/usr/lib64/ && \
     ln -sfn /usr/local/$app_name/include /usr/include/$app_name && \
     ln -sfn /usr/include/$app_name/bin/$app_name /usr/bin/$app_name && \
+    ln -sfn /usr/bin/$app_name usr/bin/cc && \
     rm -f /usr/lib64/libstdc++.so.6 && \
     source /etc/profile && ldconfig && \
     cd ../../ && rm -rf $app_name"-"$app_version*
@@ -534,8 +528,6 @@ function install_gtags(){
     check_success
 }
 
-
-
 # 安装wsl的systemctl
 function install_systemctl() {
     mv -f /usr/bin/systemctl /usr/bin/systemctl.old && \
@@ -561,18 +553,13 @@ function install_openssl() {
     cd $app_name"-"$app_version && \
     mkdir build && cd build && \
     ../config --prefix=/usr/local/$app_name"-"$app_version && \
-    make -j8 && make install
-    check_success
-
-    yum remove openssl openssl-devel -y
-
+    make -j8 && make install && \
     ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/$app_name.conf && \
     source /etc/profile && \
     cd ../../ && rm -rf $app_name"-"$app_version*
     check_success
-
 }
 
 # 安装nxx所需环境
@@ -620,6 +607,7 @@ function install_nxx_evn() {
 
     #安装consul
     if [ -z `consul -v 2>&1 | grep "Consul"` ]; then
+        sed -i 's@#!/usr/bin/python @#!/usr/bin/python2 @g' /usr/bin/yum-config-manager && \
         yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo && \
         yum -y install consul && \
         mkdir -p /data/Consul/data && \
