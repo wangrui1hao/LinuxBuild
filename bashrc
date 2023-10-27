@@ -12,6 +12,8 @@ fi
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export SCREENDIR=$HOME/.screen
 
+# bashrc_version 0.0.1
+
 # golang环境相关
 export GOPATH="$HOME/go:$NXXCDC"
 export GO111MODULE=auto
@@ -36,7 +38,7 @@ function AddressPortMapping {
 	do
 		NEW_STRING="netsh interface portproxy add v4tov4 listenport="$CURR_PORT" listenaddress=0.0.0.0 connectport="$CURR_PORT" connectaddress="$LINUX_IP";"$NEW_STRING
 	done
-	# 此处的'pc'可在配置文件内替换为自己的windows地址
+	# 此处的'pc'可在配置文件内替换为自己的windows地址，~/.ssh/config
 	ssh pc $NEW_STRING > /dev/null
 }
 

@@ -60,6 +60,15 @@ if [ -z "$is_install" ]; then
     source /etc/profile
 fi
 
+# bashrc
+is_install=`cat ~/.bashrc | grep "bashrc_version"`
+if [ -z "$is_install" ]; then
+    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/bashrc -O ~/.bashrc
+    source ~/.bashrc
+fi
+
 #拉取nvim配置
 mkdir -p ~/.config && rm -rf ~/.config/nvim
 cd ~/.config && git clone https://github.com/wangrui1hao/nvim-for-server.git nvim --depth=1 
+
+
