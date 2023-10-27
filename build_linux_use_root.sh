@@ -190,6 +190,7 @@ function install_gcc() {
     mv /usr/local/$app_name/bin/gofmt /usr/local/$app_name/bin/gcc-gofmt && \
     echo "/usr/local/"$app_name"/lib64" >> /etc/ld.so.conf.d/gnu.conf && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
+    mv -f /usr/local/$app_name/lib64/*gdb.py /usr/share/gdb/auto-load/usr/lib64/ && \
     ln -s /usr/local/$app_name/include /usr/include/$app_name && \
     source /etc/profile && ldconfig && \
     cd ../../ && rm -rf $app_name"-"$app_version*
@@ -210,15 +211,10 @@ function install_gdb() {
 
     # 卸载自带的gdb
     yum remove gdb -y
-
-    if [ ! -d /data ]
-    then
-        mkdir /data
-    fi
     
     if [ ! -d /data/thirdparty ]
     then
-        mkdir /data/thirdparty
+        mkdir -p /data/thirdparty
     fi
 
     if [ ! -d /etc/gdb ]
@@ -578,10 +574,9 @@ function install_nxx_evn() {
     if [ -z `consul -v 2>&1 | grep "Consul"` ]; then
         yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo && \
         yum -y install consul && \
-        mkdir /data/Consul && \
-        mkdir /data/Consul/data && \
-        mkdir /data/Consul/conf && \
-        mkdir /data/Consul/logs
+        mkdir -p /data/Consul/data && \
+        mkdir -p /data/Consul/conf && \
+        mkdir -p /data/Consul/logs
         check_success
     fi
 
@@ -592,8 +587,7 @@ function install_nxx_evn() {
         tar -xzvf redis-stable.tar.gz && \
         cd redis-stable && \
         make -j8 && make install && \
-        mkdir /data/Redis && \
-        mkdir /data/Redis/conf && \
+        mkdir -p /data/Redis/conf && \
         cp redis.conf /data/Redis/conf/redis.conf && \
         cd ../ && rm -rf redis-stable*
         check_success
