@@ -268,7 +268,7 @@ function install_gdb() {
         --with-libmpc-prefix=/usr/local/mpc --with-libmpfr-prefix=/usr/local/mpfr && \
     make -j8 && make install && \
     ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
-    echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
+    echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     source /etc/profile && \
     cd ../../ && rm -rf $app_name"-"$app_version*
     check_success
