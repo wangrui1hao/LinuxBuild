@@ -276,14 +276,15 @@ function install_go() {
       return 0
     fi
 
-    wget $download_path --no-check-certificate && \
-    tar -C /usr/local/$app_name"-"$app_version -xvf $app_name$app_version".linux-amd64.tar.gz" && \
+    wget $download_path --no-check-certificate && mkdir temp_go && \
+    tar -C ./temp_go -xvf $app_name$app_version".linux-amd64.tar.gz" && \
+    mv -f ./temp_go/$app_name /usr/local/$app_name"-"$app_version
     ln -s /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     echo "export GOROOT=/usr/local/"$app_name >> /etc/profile && \
     source /etc/profile && \
     sed -i 's/Defaults.*secure_path.*/&:\/usr\/local\/go\/bin/g' /etc/sudoers && \
-    rm -rf $app_name$app_version*
+    rm -rf $app_name$app_version* temp_go
     check_success
 }
 
