@@ -20,18 +20,17 @@ function root_need() {
 function pre_install_env() {
     # gcc已安装检测
     gcc_version="13.2.0"
-    gcc_installed=`gcc -v 2>&1 | grep version | awk '{print(match($0, "'$gcc_version'")>0)}'`
-    if [ -z $gcc_installed ] || [ $gcc_installed == "0" ]; then
+    if [ ! -d /usr/local/gcc-$gcc_version ]; then
+        echo "gcc not install"
         yum install -y gcc-c++ gcc libtool
     fi
 
     # openssl已安装检测
     openssl_version="1.1.1w"
-    openssl_installed=`openssl version 2>&1 | awk '{print(match($0, "'$openssl_version'")>0)}'`
-    if [ -z $openssl_installed ] || [ $openssl_installed == "0" ]; then
+    if [ ! -d /usr/local/openssl-$openssl_version ]; then
+        echo "openssl not install"
         yum install -y openssl-devel
     fi
-
 
     yum install -y curl-devel mysql-devel zlib-devel screen wget git fuse fuse-devel
     yum install -y bzip2 bzip2-devel zip unzip
