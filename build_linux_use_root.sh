@@ -37,7 +37,7 @@ function pre_install_env() {
 function install_cmake() {
     app_name="cmake"
     app_version="3.10.0"
-    download_path="https://cmake.org/files/v"$app_version"/"$app_name"-"$app_version".tar.gz"
+    download_path="https://cmake.org/files/v3.10/"$app_name"-"$app_version".tar.gz"
 
     # 已安装检测
     is_installed=`cmake --version 2>&1 | grep version | awk '{print (match($0, '$app_version')>0)}'`
