@@ -29,15 +29,14 @@ function pre_install_env() {
     openssl_version="1.1.1w"
     if [ ! -d /usr/local/openssl-$openssl_version ]; then
         echo "openssl not install"
-        yum install -y openssl-devel
+        yum install -y openssl-devel mysql-devel
     fi
 
-    yum install -y curl-devel mysql-devel zlib-devel screen wget git fuse fuse-devel
-    yum install -y bzip2 bzip2-devel zip unzip
-    yum install -y make automake kernel-devel
-    yum install -y ncurses-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel python-devel
-    yum install -y readline-devel texinfo bc
-    yum install -y telnet psmisc lsof openssh-server openssh-clients openssh
+    yum install -y curl-devel zlib-devel screen wget git fuse fuse-devel \
+        bzip2 bzip2-devel zip unzip make automake kernel-devel ncurses-devel \
+        tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel \
+        python-devel readline-devel texinfo bc telnet psmisc lsof \
+        openssh-server openssh-clients openssh
 }
 
 # 安装cmake
