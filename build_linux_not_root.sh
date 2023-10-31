@@ -26,7 +26,7 @@ check_success
 # bashrc
 is_install=`cat ~/.bashrc | grep "bashrc_version"`
 if [ -z "$is_install" ]; then
-    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/bashrc -O ~/bashrc && \
+    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/bash/bashrc -O ~/bashrc && \
     mv -f ~/.bashrc ~/.bashrc_back && \
     mv ~/bashrc ~/.bashrc && \
     source ~/.bashrc
@@ -102,15 +102,24 @@ if [ -d ~/.config/nvim ]; then
 fi
 if [ $need_pull_nvim == "1" ]; then
     mkdir -p ~/.config && rm -rf ~/.config/nvim && \
-    cd ~/.config && git clone https://github.com/wangrui1hao/nvim-for-server.git nvim --depth=1 && \
+    cd ~/.config && git clone https://github.com/wangrui1hao/nvim-for-server.git nvim --depth=1
     check_success
+    cd ~
 fi
 
 # ssh config
 if [ ! -f ~/.ssh/config ]; then
     mkdir -p ~/.ssh && cd ~/.ssh && \
-    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/ssh_config -O config && \
+    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/openssh/ssh_config -O config && \
     chmod 600 ~/.ssh/config
+    check_success
+    cd ~
+fi
+
+# init.d 
+if [ ! -f /etc/init.d/custom ]; then
+    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/init.d/custom && \
+    sudo mv ./custom /etc/init.d/custom
     check_success
 fi
 
