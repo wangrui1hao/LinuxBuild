@@ -1,5 +1,7 @@
 #!/bin/bash
 
+LINUX_BUILD_URL="https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main"
+
 # 检测执行是否成功
 function check_success() {
     if [ $? -gt 0  ];then
@@ -26,7 +28,7 @@ check_success
 # bashrc
 is_install=`cat ~/.bashrc | grep "bashrc_version"`
 if [ -z "$is_install" ]; then
-    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/bash/bashrc -O ~/bashrc && \
+    wget -c $LINUX_BUILD_URL/bash/bashrc -O ~/bashrc && \
     mv -f ~/.bashrc ~/.bashrc_back && \
     mv ~/bashrc ~/.bashrc && \
     source ~/.bashrc
@@ -110,15 +112,25 @@ fi
 # ssh config
 if [ ! -f ~/.ssh/config ]; then
     mkdir -p ~/.ssh && cd ~/.ssh && \
-    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/openssh/ssh_config -O config && \
-    chmod 600 ~/.ssh/config
+    wget -c $LINUX_BUILD_URL/openssh/ssh_config -O config && \
+    chmod 600 ~/.ssh/config && \
+    sudo sed "s@^HostKey /etc/ssh/ssh_host_@#HostKey /etc/ssh/ssh_host_@g; \ 
+        s@#HostKey /etc/ssh/ssh_host_rsa_key@HostKey /etc/ssh/ssh_host_rsa_key@g; \  
+        s@#Port.*@Port 2224@g" /etc/ssh/sshd_config && \
+    sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
     check_success
     cd ~
 fi
 
+# svn
+if [ ! -f ~/.subversion/config ]; then
+    mkdir -p ~/.subversion && echo -e "[auth]\npassword-stores = gpg-agent" > ~/.subversion/config
+    check_success
+fi
+
 # init.d 
 if [ ! -f /etc/init.d/custom ]; then
-    wget -c https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/init.d/custom && \
+    wget -c $LINUX_BUILD_URL/init.d/custom && \
     sudo mv ./custom /etc/init.d/custom
     check_success
 fi

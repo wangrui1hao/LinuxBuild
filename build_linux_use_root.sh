@@ -1,5 +1,7 @@
 #!/bin/bash
 
+LINUX_BUILD_URL="https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main"
+
 # 检测执行是否成功
 function check_success() {
     if [ $? -gt 0  ];then
@@ -243,7 +245,7 @@ function install_gdb() {
     # 拷贝gdbinit
     if [ ! -f /etc/gdb/gdbinit ]
     then
-        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/gdb/gdbinit && \
+        wget $LINUX_BUILD_URL/gdb/gdbinit && \
         mv -f gdbinit /etc/gdb/gdbinit
         check_success
     fi
@@ -448,9 +450,9 @@ function install_python3() {
     check_success
 
     # 更新yum
-    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/yum/yum --no-check-certificate && \
+    wget $LINUX_BUILD_URL/yum/yum --no-check-certificate && \
     chmod 775 yum && mv -f ./yum /usr/bin/yum && \
-    wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/yum/urlgrabber-ext-down --no-check-certificate && \
+    wget $LINUX_BUILD_URL/yum/urlgrabber-ext-down --no-check-certificate && \
 	  chmod 775 urlgrabber-ext-down && mv -f ./urlgrabber-ext-down /usr/libexec/urlgrabber-ext-down
     check_success
 }
@@ -589,19 +591,19 @@ function install_nxx_evn() {
 
     #拷贝protoc xlua.so，librsa.a
     if [ ! -f /usr/local/bin/protoc ]; then
-        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/bin/protoc --no-check-certificate && \
+        wget $LINUX_BUILD_URL/bin/protoc --no-check-certificate && \
         chmod +x protoc && mv -f protoc /usr/local/bin/protoc
         check_success
     fi
     
     if [ ! -f /usr/local/lib/libxlua.so ]; then
-        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/lib/libxlua.so --no-check-certificate && \
+        wget $LINUX_BUILD_URL/lib/libxlua.so --no-check-certificate && \
         mv -f libxlua.so /usr/local/lib/libxlua.so && ldconfig
         check_success
     fi
     
     if [ ! -f /usr/local/lib/librsa.a ]; then
-        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/lib/librsa.a --no-check-certificate && \
+        wget $LINUX_BUILD_URL/lib/librsa.a --no-check-certificate && \
         mv -f librsa.a /usr/local/lib/librsa.a && ldconfig
         check_success
     fi
@@ -615,11 +617,10 @@ function install_nxx_evn() {
         mkdir -p /data/Consul/data && \
         mkdir -p /data/Consul/conf && \
         mkdir -p /data/Consul/logs && \
-        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/systemd/consul.service -O /etc/systemd/system/consul.service && \
+        wget $LINUX_BUILD_URL/systemd/consul.service -O /etc/systemd/system/consul.service && \
         systemctl daemon-reload
         check_success
     fi
-
 
     # 安装redis
     has_redis=`redis-cli -v 2>&1 | grep "redis-cli "`
@@ -632,8 +633,8 @@ function install_nxx_evn() {
         mkdir -p /data/Redis/data && \
         mkdir -p /data/Redis/logs && \
         cd /data/Redis/conf && \
-        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/redis/redis.conf -O /data/Redis/conf/redis.conf && \
-        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/systemd/redis.service -O /etc/systemd/system/redis.service && \
+        wget $LINUX_BUILD_URL/redis/redis.conf -O /data/Redis/conf/redis.conf && \
+        wget $LINUX_BUILD_URL/systemd/redis.service -O /etc/systemd/system/redis.service && \
         systemctl daemon-reload && \
         cd ../ && rm -rf redis-stable*
         check_success

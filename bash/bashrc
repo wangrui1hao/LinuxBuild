@@ -15,7 +15,7 @@ export SCREENDIR=$HOME/.screen
 # bashrc_version 0.0.1
 
 # golang环境相关
-export GOPATH="$HOME/go:$NXXCDC"
+export GOPATH="$HOME/go"
 export GO111MODULE=auto
 
 # 其他
@@ -28,8 +28,9 @@ function AddressPortMapping {
 	# 需要映射的端口ID加在这里
 	PORT_MAPPING=(
 		80
-		2223
+		2224
 		3306
+		6379
 		8500
 	)
 	LINUX_IP=`ifconfig | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}'`
