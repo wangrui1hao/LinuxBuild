@@ -38,40 +38,15 @@ function AddressPortMapping {
 	do
 		NEW_STRING="netsh interface portproxy add v4tov4 listenport="$CURR_PORT" listenaddress=0.0.0.0 connectport="$CURR_PORT" connectaddress="$LINUX_IP";"$NEW_STRING
 	done
+
 	# 此处的'pc'可在配置文件内替换为自己的windows地址，~/.ssh/config
 	ssh pc $NEW_STRING > /dev/null
 }
 
-# 启动redis-server
-function RunRedis {
-	redis-server /data/Redis/conf/redis.conf
-}
-
-# 启动consul
-function RunConsul {
-	consul agent -server -bootstrap -client 0.0.0.0 -ui -data-dir=/data/Consul/data -config-dir=/data/Consul/conf > /data/Consul/logs/consul-log.log &
-}
-
-# 启动mysql
-function RunMysql {
-	#sudo mkdir -p /var/run/mysqld
-	#sudo chown mysql.mysql /var/run/mysqld
-	sudo systemctl restart mysqld
-}
-
-# 启动sshd
-function RunSshd {
-	sudo systemctl restart sshd
-}
-
 # 启动一键脚本
 function RestartRun {
-	AddressPortMapping > /dev/null &
-	RunRedis > /dev/null &
-	RunConsul > /dev/null &
-	screen -wipe > /dev/null &
-	SVNAgent > /dev/null &
-	wait
+	screen -wipe > /dev/null
+	AddressPortMapping > /dev/null
 }
 
 # 重启svn托管服务

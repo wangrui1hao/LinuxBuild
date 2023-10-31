@@ -1,0 +1,5 @@
+#!/bin/sh
+
+mkdir -p /var/run/mysqld && \
+chown mysql.mysql /var/run/mysqld && \
+systemctl restart sshd mysqld redis consul

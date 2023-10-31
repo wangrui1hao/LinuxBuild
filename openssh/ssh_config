@@ -1,5 +1,5 @@
 Host pc
-  Hostname 10.1.00.00
+  Hostname 10.10.10.10
   User rui.wang05
   Port 2233
   IdentityFile ~/.ssh/id_ed25519

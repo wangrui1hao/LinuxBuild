@@ -614,7 +614,10 @@ function install_nxx_evn() {
         yum -y install consul && \
         mkdir -p /data/Consul/data && \
         mkdir -p /data/Consul/conf && \
-        mkdir -p /data/Consul/logs
+        mkdir -p /data/Consul/logs && \
+        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/consul.service -O /etc/systemd/system/consul.service && \
+        ln -s /etc/systemd/system/consul.service /etc/systemd/system/multi-user.target.wants/consul.service && \
+        systemctl daemon-reload
         check_success
     fi
 
@@ -627,7 +630,13 @@ function install_nxx_evn() {
         cd redis-stable && \
         make -j8 && make install && \
         mkdir -p /data/Redis/conf && \
-        cp redis.conf /data/Redis/conf/redis.conf && \
+        mkdir -p /data/Redis/data && \
+        mkdir -p /data/Redis/logs && \
+        cd /data/Redis/conf && \
+        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/redis/redis.conf -O /data/Redis/conf/redis.conf && \
+        wget https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main/redis/redis.service -O /etc/systemd/system/redis.service && \
+        ln -s /etc/systemd/system/redis.service /etc/systemd/system/multi-user.target.wants/redis.service && \
+        systemctl daemon-reload && \
         cd ../ && rm -rf redis-stable*
         check_success
     fi
