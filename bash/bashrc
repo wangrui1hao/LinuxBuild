@@ -27,17 +27,15 @@ export SVN_EDITOR=vim
 function AddressPortMapping {
 	# 需要映射的端口ID加在这里
 	PORT_MAPPING=(
-		80
-		2224
-		3306
-		6379
-		8500
+		80 # web
+		2224 # ssh
+		3306 # mysql
+		6379 # redis
+		8500 # consul
 	)
 	LINUX_IP=`ifconfig | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}'`
-	
-	for CURR_PORT in ${PORT_MAPPING[@]}
-	do
-		NEW_STRING="netsh interface portproxy add v4tov4 listenport="$CURR_PORT" listenaddress=0.0.0.0 connectport="$CURR_PORT" connectaddress="$LINUX_IP";"$NEW_STRING
+	for CURR_PORT in ${PORT_MAPPING[@]}; do
+		NEW_STRING="netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport="$CURR_PORT" connectaddress="$LINUX_IP" connectport="$CURR_PORT";"$NEW_STRING
 	done
 
 	# 此处的'pc'可在配置文件内替换为自己的windows地址，~/.ssh/config

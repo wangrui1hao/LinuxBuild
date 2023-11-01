@@ -4,7 +4,7 @@ LINUX_BUILD_URL="https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main"
 
 # 检测执行是否成功
 function check_success() {
-    if [ $? -gt 0  ];then
+    if [ $? -gt 0  ]; then
         echo "retcode != 0, check failed!"
         exit 1
     fi 
@@ -361,7 +361,7 @@ function install_svn() {
     app_name="scons"
     app_version="2.3.0"
     download_path="https://cfhcable.dl.sourceforge.net/project/"$app_name"/"$app_name"/"$app_version"/"$app_name"-"$app_version".tar.gz"
-    if [ -f /usr/bin/$app_name ];then
+    if [ -f /usr/bin/$app_name ]; then
         echo $app_name"-"$app_version" is installed, skip..."
     else
         wget $download_path --no-check-certificate && \

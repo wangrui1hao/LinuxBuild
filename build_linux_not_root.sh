@@ -4,7 +4,7 @@ LINUX_BUILD_URL="https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main"
 
 # 检测执行是否成功
 function check_success() {
-    if [ $? -gt 0  ];then
+    if [ $? -gt 0  ]; then
         echo "retcode != 0, check failed!"
         exit 1
     fi 
