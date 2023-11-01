@@ -27,11 +27,11 @@ export SVN_EDITOR=vim
 function AddressPortMapping {
 	# 需要映射的端口ID加在这里
 	PORT_MAPPING=(
-		80 # web
+		# 80 # web
 		2224 # ssh
-		3306 # mysql
-		6379 # redis
-		8500 # consul
+		# 3306 # mysql
+		# 6379 # redis
+		# 8500 # consul
 	)
 	LINUX_IP=`ifconfig | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}'`
 	for CURR_PORT in ${PORT_MAPPING[@]}; do
