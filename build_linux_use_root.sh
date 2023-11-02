@@ -478,7 +478,7 @@ function install_nodejs() {
     echo "export NODE_PATH=$NODE_HOME/lib/node_modules:\$PATH" >> /etc/profile && \
     source /etc/profile && \
     npm install -g yarn neovim && \
-    rm -rf $app_name"-"$app_version"*"
+    rm -rf $app_name"-"$app_version*
     check_success
 }
 
@@ -636,7 +636,7 @@ function install_nxx_evn() {
         wget $LINUX_BUILD_URL/redis/redis.conf -O /data/Redis/conf/redis.conf && \
         wget $LINUX_BUILD_URL/systemd/redis.service -O /etc/systemd/system/redis.service && \
         systemctl daemon-reload && \
-        cd ../ && rm -rf redis-stable*
+        cd ~ && rm -rf redis-stable*
         check_success
     fi
 
