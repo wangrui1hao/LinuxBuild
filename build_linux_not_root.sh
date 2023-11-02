@@ -114,7 +114,7 @@ if [ ! -f ~/.ssh/config ]; then
     mkdir -p ~/.ssh && cd ~/.ssh && \
     wget -c $LINUX_BUILD_URL/openssh/ssh_config -O config && \
     chmod 600 ~/.ssh/config && \
-    sudo sed "s@^HostKey /etc/ssh/ssh_host_@#HostKey /etc/ssh/ssh_host_@g; \ 
+    sudo sed -i "s@^HostKey /etc/ssh/ssh_host_@#HostKey /etc/ssh/ssh_host_@g; \ 
         s@#HostKey /etc/ssh/ssh_host_rsa_key@HostKey /etc/ssh/ssh_host_rsa_key@g; \  
         s@#Port.*@Port 2224@g" /etc/ssh/sshd_config && \
     sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
