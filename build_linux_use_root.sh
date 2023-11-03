@@ -1,6 +1,7 @@
 #!/bin/bash
 
 LINUX_BUILD_URL="https://raw.githubusercontent.com/wangrui1hao/LinuxBuild/main"
+JNUM="-j16"
 
 # 检测执行是否成功
 function check_success() {
@@ -34,6 +35,32 @@ function pre_install_env() {
         openssh-server openssh-clients openssh openssl-devel mysql-devel
 }
 
+function install_make() {
+	app_name="make"
+    app_version="4.4"
+    download_path="https://ftp.gnu.org/gnu/"$app_name"/"$app_name"-"$app_version".tar.gz"
+
+ 	if [ -d /usr/local/$app_name-$app_version ]; then
+  		echo $app_name"-"$app_version" is installed, skip..."
+		return 0
+  	fi
+   
+	wget $download_path --no-check-certificate && \
+	tar -xvf $app_name"-"$app_version".tar.gz" && \
+	cd $app_name"-"$app_version && \
+	mkdir build && cd build && \
+	../configure --prefix=/usr/local/$app_name"-"$app_version && \
+	make $JNUM && make install && \
+	ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+ 	ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+  	ln -sfn /usr/local/$app_name/include/* /usr/include/ && \
+   	mv /usr/bin/$app_name /usr/bin/$app_name"_back"
+  	echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
+   	source /etc/profile && \
+	cd ../../ && rm -rf $app_name"-"$app_version*
+	check_success
+}
+
 # 安装cmake
 function install_cmake() {
     app_name="cmake"
@@ -50,7 +77,7 @@ function install_cmake() {
     wget $download_path --no-check-certificate && \
     tar -zxvf $app_name"-"$app_version".tar.gz" && \
     cd $app_name"-"$app_version && \
-    ./bootstrap && gmake -j8 && make install && \
+    ./bootstrap && gmake $JNUM && make install && \
     cd ../ && rm -rf $app_name"-"$app_version*
     check_success
 }
@@ -67,7 +94,7 @@ function install_gnu_tool() {
         cd $app_name"-"$app_version && \
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
@@ -85,7 +112,7 @@ function install_gnu_tool() {
         cd $app_name"-"$app_version && \
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         ldconfig && \
@@ -105,7 +132,7 @@ function install_gnu_tool() {
         cd $app_name"-"$app_version && \
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-gmp=/usr/local/gmp && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         ldconfig && \
@@ -125,7 +152,7 @@ function install_gnu_tool() {
         cd $app_name"-"$app_version && \
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-gmp=/usr/local/gmp --with-mpfr=/usr/local/mpfr && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         ldconfig && \
@@ -145,7 +172,7 @@ function install_gnu_tool() {
         cd $app_name"-"$app_version && \
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/gnu.conf && \
         rm -f /usr/lib64/libreadline.so
@@ -185,7 +212,7 @@ function install_gcc() {
     ../configure --prefix=/usr/local/$app_name"-"$app_version --enable-bootstrap --disable-multilib --enable-bootstrap --enable-default-pie \
         --enable-default-ssp --disable-fixincludes --enable-languages=c,c++,go --with-zlib=/usr/local/zlib \
         --with-gmp=/usr/local/gmp --with-mpfr=/usr/local/mpfr --with-mpc=/usr/local/mpc && \
-    make -j8
+    make $JNUM
     check_success
 
     # 卸载自带的gcc
@@ -258,7 +285,7 @@ function install_gdb() {
     ../configure --prefix=/usr/local/$app_name"-"$app_version --enable-tui=yes --with-system-gdbinit=/etc/gdb/gdbinit \
         --with-libpython-prefix=/usr/local/python3 --with-system-readline=/usr/local/readline --with-libgmp-prefix=/usr/local/gmp \
         --with-libmpc-prefix=/usr/local/mpc --with-libmpfr-prefix=/usr/local/mpfr && \
-    make -j8 && make install && \
+    make $JNUM && make install && \
     ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     source /etc/profile && \
@@ -305,7 +332,7 @@ function install_svn() {
         cd $app_name"-"$app_version && \
         mkdir build_dir && cd build_dir && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
@@ -323,7 +350,7 @@ function install_svn() {
         cd $app_name"-"$app_version && \
         mkdir build_dir && cd build_dir && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-apr=/usr/local/apr && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         cd ../../ && rm -rf $app_name"-"$app_version*
         check_success
@@ -344,7 +371,7 @@ function install_svn() {
         cd "sqlite-autoconf-3430200" && \
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
         echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/$app_name.conf && \
@@ -400,7 +427,7 @@ function install_svn() {
         mkdir build_dir && cd build_dir && \
         ../configure --prefix=/usr/local/$app_name"-"$app_version --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util \
             --with-sqlite=/usr/local/sqlite3 --with-zlib=/usr/local/zlib --with-serf=/usr/local/serf --with-lz4=internal --with-utf8proc=internal && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
         echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile
         source /etc/profile && \
@@ -428,7 +455,7 @@ function install_python3() {
     cd "Python-"$app_version && \
     mkdir build && cd build && \
     ../configure --prefix=/usr/local/$app_name"-"$app_version --enable-shared && \
-    make -j8 && make install
+    make $JNUM && make install
     check_success
 
     # 修改自带python为back
@@ -520,7 +547,7 @@ function install_gtags(){
     cd $app_name"-"$app_version && \
     mkdir build && cd build && \
     ../configure --prefix=/usr/local/$app_name"-"$app_version --with-sqlite3=/usr/local/sqlite3 && \
-    make -j8 && make install && \
+    make $JNUM && make install && \
     ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     source /etc/profile && \
@@ -553,7 +580,7 @@ function install_openssl() {
     cd $app_name"-"$app_version && \
     mkdir build && cd build && \
     ../config --prefix=/usr/local/$app_name"-"$app_version && \
-    make -j8 && make install && \
+    make $JNUM && make install && \
     ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
     echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
     echo "/usr/local/"$app_name"/lib" >> /etc/ld.so.conf.d/$app_name.conf && \
@@ -571,7 +598,7 @@ function install_nxx_evn() {
         cd $app_name && ./autogen.sh && \
         mkdir build && cd build && \
         ../configure --prefix=/usr/local/$app_name && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
         source /etc/profile && \
         cd ../../ && rm -rf $app_name*
@@ -626,7 +653,7 @@ function install_nxx_evn() {
         wget https://download.redis.io/redis-stable.tar.gz && \
         tar -xzvf redis-stable.tar.gz && \
         cd redis-stable && \
-        make -j8 && make install && \
+        make $JNUM && make install && \
         mkdir -p /data/Redis/conf && \
         mkdir -p /data/Redis/data && \
         mkdir -p /data/Redis/logs && \
@@ -654,6 +681,7 @@ function main() {
     echo "请使用root权限运行此脚本" && \
     root_need && \
     pre_install_env && \
+	install_make && \
     install_cmake && \
     install_gnu_tool
     check_success
