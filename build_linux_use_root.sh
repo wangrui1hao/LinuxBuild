@@ -36,29 +36,29 @@ function pre_install_env() {
 }
 
 function install_make() {
-	app_name="make"
+    app_name="make"
     app_version="4.4"
     download_path="https://ftp.gnu.org/gnu/"$app_name"/"$app_name"-"$app_version".tar.gz"
 
- 	if [ -d /usr/local/$app_name-$app_version ]; then
-  		echo $app_name"-"$app_version" is installed, skip..."
-		return 0
-  	fi
+    if [ -d /usr/local/$app_name-$app_version ]; then
+        echo $app_name"-"$app_version" is installed, skip..."
+        return 0
+    fi
    
-	wget $download_path --no-check-certificate && \
-	tar -xvf $app_name"-"$app_version".tar.gz" && \
-	cd $app_name"-"$app_version && \
-	mkdir build && cd build && \
-	../configure --prefix=/usr/local/$app_name"-"$app_version && \
-	make $JNUM && make install && \
-	ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
- 	ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
-  	ln -sfn /usr/local/$app_name/include/* /usr/include/ && \
-   	mv /usr/bin/$app_name /usr/bin/$app_name"_back"
-  	echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
-   	source /etc/profile && \
-	cd ../../ && rm -rf $app_name"-"$app_version*
-	check_success
+    wget $download_path --no-check-certificate && \
+    tar -xvf $app_name"-"$app_version".tar.gz" && \
+    cd $app_name"-"$app_version && \
+    mkdir build && cd build && \
+    ../configure --prefix=/usr/local/$app_name"-"$app_version && \
+    make $JNUM && make install && \
+    ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+    ln -sfn /usr/local/$app_name"-"$app_version /usr/local/$app_name && \
+    ln -sfn /usr/local/$app_name/include/* /usr/include/ && \
+    mv /usr/bin/$app_name /usr/bin/$app_name"_back"
+    echo "export PATH=/usr/local/"$app_name"/bin:\$PATH" >> /etc/profile && \
+    source /etc/profile && \
+    cd ../../ && rm -rf $app_name"-"$app_version*
+    check_success
 }
 
 # 安装cmake
@@ -478,7 +478,7 @@ function install_python3() {
     wget $LINUX_BUILD_URL/yum/yum --no-check-certificate && \
     chmod 775 yum && mv -f ./yum /usr/bin/yum && \
     wget $LINUX_BUILD_URL/yum/urlgrabber-ext-down --no-check-certificate && \
-	  chmod 775 urlgrabber-ext-down && mv -f ./urlgrabber-ext-down /usr/libexec/urlgrabber-ext-down
+      chmod 775 urlgrabber-ext-down && mv -f ./urlgrabber-ext-down /usr/libexec/urlgrabber-ext-down
     check_success
 }
 
@@ -681,7 +681,7 @@ function main() {
     echo "请使用root权限运行此脚本" && \
     root_need && \
     pre_install_env && \
-	install_make && \
+    install_make && \
     install_cmake && \
     install_gnu_tool
     check_success
