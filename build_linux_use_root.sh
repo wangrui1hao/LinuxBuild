@@ -37,8 +37,8 @@ function pre_install_env() {
 # 安装cmake
 function install_cmake() {
     app_name="cmake"
-    app_version="3.10.0"
-    download_path="https://cmake.org/files/v3.10/"$app_name"-"$app_version".tar.gz"
+    app_version="3.27.0"
+    download_path="https://cmake.org/files/v3.27/"$app_name"-"$app_version".tar.gz"
 
     # 已安装检测
     is_installed=`cmake --version 2>&1 | grep version | awk '{print (match($0, '$app_version')>0)}'`
@@ -249,8 +249,6 @@ function install_gdb() {
         mv -f gdbinit /etc/gdb/gdbinit
         check_success
     fi
-
-    # 安装readline
     
     # 安装gdb
     wget $download_path --no-check-certificate && \
@@ -667,8 +665,15 @@ function main() {
     fi
 
     install_go && \
-    install_svn && \
-    install_gdb && \
+    install_svn
+    check_success
+
+    # 选择性安装 gdb
+    if [ -z "$NOT_INSTALL_GDB" ]; then
+        install_gdb
+        check_success
+    fi
+    
     install_python3 && \
     install_nodejs && \
     install_nvim && \
