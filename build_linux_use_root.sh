@@ -77,7 +77,7 @@ function install_cmake() {
     wget $download_path --no-check-certificate && \
     tar -zxvf $app_name"-"$app_version".tar.gz" && \
     cd $app_name"-"$app_version && \
-    ./bootstrap && gmake $JNUM && make install && \
+    ./bootstrap && make $JNUM && make install && \
     cd ../ && rm -rf $app_name"-"$app_version*
     check_success
 }
